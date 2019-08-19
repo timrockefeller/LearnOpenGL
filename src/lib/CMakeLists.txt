@@ -1,0 +1,4 @@
+set(MODE "LIB")
+
+
+ADD_ALL_SUBDIR()
