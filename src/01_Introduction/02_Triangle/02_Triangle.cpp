@@ -56,8 +56,8 @@ int main(int argc, char const* argv[]) {
 
     // ./vertex.vs
     File vsf("./src/01_Introduction/02_Triangle/vertex.vs", File::Mode::READ);
-    const char* vs = vsf.ReadAll().c_str();
-    cout << vs<<endl;
+    string vss = vsf.ReadAll();
+    const char* vs = vss.c_str();
     //创建着色器
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -78,9 +78,9 @@ int main(int argc, char const* argv[]) {
     //重复一次创建片段着色器
     unsigned int fragmentShader;
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    File fsf("./src/01_Introduction/02_Triangle/frag_red.fs", File::Mode::READ);
-    const char* fs = fsf.ReadAll().c_str();
-    cout << fs<<endl;
+    File fsf("./src/01_Introduction/02_Triangle/frag_orange.fs", File::Mode::READ);
+    string fss = fsf.ReadAll();
+    const char* fs = fss.c_str();
     glShaderSource(fragmentShader, 1, &fs, NULL);
     glCompileShader(fragmentShader);
     //check
