@@ -19,9 +19,9 @@ Shader::Shader(const string& vertexShaderPath,
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
 
-    // check valid
     int success;
     char infoLog[512];
+    // check valid
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
@@ -46,7 +46,6 @@ Shader::Shader(const string& vertexShaderPath,
                   << infoLog << std::endl;
     }
 
-    
     shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
@@ -58,20 +57,30 @@ Shader::Shader(const string& vertexShaderPath,
         std::cout << "ERROR::SHADER::PROGRAM::LINK_FAILED\n"
                   << infoLog << std::endl;
     }
-    
+
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
-
-
 }
-
 
 Shader::~Shader() {
-
-    
+    glDeleteProgram(shaderProgram);
 }
 
+void Shader::Use() {
+    if (isValid())
+        glUseProgram(shaderProgram);
+}
 
-void Shader::Use(){
-    glUseProgram(shaderProgram);
+bool Shader::isValid() {
+    return glIsProgram(shaderProgram);
+}
+
+void Shader::setBool(const std::string& name, bool value) {
+    glUniform1i(glGetUniformLocation(shaderProgram, name.c_str()), (int)value);
+}
+void Shader::setInt(const std::string& name, int value) {
+    glUniform1i(glGetUniformLocation(shaderProgram, name.c_str()), value);
+}
+void Shader::setFloat(const std::string& name, float value) {
+    glUniform1f(glGetUniformLocation(shaderProgram, name.c_str()), value);
 }
