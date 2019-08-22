@@ -46,7 +46,8 @@
         "streambuf": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "xstring": "cpp"
+        "xstring": "cpp",
+        "map": "cpp"
     },
     "C_Cpp.configurationWarnings": "Disabled"
 }
