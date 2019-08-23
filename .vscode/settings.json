@@ -47,7 +47,8 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "xstring": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "list": "cpp"
     },
     "C_Cpp.configurationWarnings": "Disabled"
 }

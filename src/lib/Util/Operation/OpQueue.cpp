@@ -3,7 +3,7 @@
 using namespace KTKR;
 using namespace std;
 
-OpQueue::OpQueue():hold(true){}
+OpQueue::OpQueue():hold(true),queue(std::list<Ptr<Operation>>()){}
 
 OpQueue& OpQueue::operator<<(Ptr<Operation> op) {
     if (op != NULL) {
