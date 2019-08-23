@@ -2,6 +2,7 @@
 #include <LOGL/Shader.h>
 #include <Util/Image.h>
 #include <Util/OpQueue.h>
+#include <cmath>
 #include <iostream>
 using namespace KTKR;
 using namespace LOGL;
@@ -21,7 +22,7 @@ int main(int argc, char const* argv[]) {
         // ---- 位置 ----   ---- 颜色 ----     - 纹理坐标 -
         0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 2.0f, 2.0f,  // 右上
         0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 2.0f, 0.0f,  // 右下
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,  // 左下
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, -0.5f, 0.0f,  // 左下
         -0.5f, 0.5f,  0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f   // 左上
     };
 
@@ -67,8 +68,7 @@ int main(int argc, char const* argv[]) {
     glGenTextures(1, &texture2);
     glBindTexture(GL_TEXTURE_2D, texture1);
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-                        GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -89,8 +89,7 @@ int main(int argc, char const* argv[]) {
 
     glBindTexture(GL_TEXTURE_2D, texture2);
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-                        GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -129,6 +128,8 @@ int main(int argc, char const* argv[]) {
 
         glBindVertexArray(VAO);
         shader->Use();
+
+        shader->setFloat("mixrate", sin(glfwGetTime()) / 2.0f + 0.5f);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(Glfw::getInstance()->getWindow());
