@@ -8,7 +8,7 @@ class Operation {
     
 
    public:
-    Operation(const std::function<void()>& op_, bool isHold_);
+    Operation(const std::function<void()>& op_, bool isHold_=true);
     void Run();
     bool isHold();
 

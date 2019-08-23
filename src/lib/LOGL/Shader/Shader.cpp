@@ -76,11 +76,14 @@ bool Shader::isValid() {
 }
 
 void Shader::setBool(const std::string& name, bool value) {
+    Use();
     glUniform1i(glGetUniformLocation(shaderProgram, name.c_str()), (int)value);
 }
 void Shader::setInt(const std::string& name, int value) {
+    Use();
     glUniform1i(glGetUniformLocation(shaderProgram, name.c_str()), value);
 }
 void Shader::setFloat(const std::string& name, float value) {
+    Use();
     glUniform1f(glGetUniformLocation(shaderProgram, name.c_str()), value);
 }

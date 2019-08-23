@@ -17,5 +17,5 @@ endforeach(SOURCE ${ALL_SOURCES})
 
 # set(STR_TARGET_LIBS "glfw3.lib glad Glfw Operation Config EventManager opengl32.lib")
 
-set(STR_TARGET_LIBS "glfw3.lib glad Operation Glfw opengl32.lib")
+set(STR_TARGET_LIBS "glfw3.lib glad Operation Glfw File Shader opengl32.lib")
 SETUP_PROJECT(${MODE} ${TARGET_NAME} ${STR_TARGET_SOURCES} ${STR_TARGET_LIBS})

@@ -16,8 +16,10 @@ class Glfw {
     void Run(KTKR::OpQueue *opList);
     void CloseWindow();
     void Terminate();
-GLFWwindow* window;
+    GLFWwindow* getWindow();
+
    private:
-    
+    GLFWwindow* window;
+    static void updateViewport(GLFWwindow* window, int width, int height);
 };
 }  // namespace LOGL
