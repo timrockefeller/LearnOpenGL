@@ -19,6 +19,6 @@ class Shader {
 
    private:
     bool isValid() const;
-    size_t shaderProgram;
+    size_t ID;
 };
 }  // namespace LOGL

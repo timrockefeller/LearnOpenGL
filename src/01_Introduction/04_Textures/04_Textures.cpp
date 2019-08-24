@@ -94,7 +94,7 @@ int main(int argc, char const* argv[]) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
-    Image* texImage2 = new Image("assets/textures/awesomeface.png");
+    Image* texImage2 = new Image("assets/textures/awesomeface.png",true);
     if (texImage2->isValid()) {
         glTexImage2D(GL_TEXTURE_2D,  //纹理目标
                      0,              //多级渐远纹理的级别

@@ -4,7 +4,7 @@ namespace KTKR {
 typedef unsigned char uByte;
 class Image {
    public:
-    Image(const char* imagePath_,int req_comp = 0);
+    Image(const char* imagePath_,bool flip = false, int req_comp = 0);
     Image();
     ~Image();
     int getWidth();
@@ -12,10 +12,10 @@ class Image {
     int getChannels();
     uByte * getData();
     bool isValid();
-    void Load(const char* imagePath_,int req_comp);
-
+    void Load(const char* imagePath_,bool flip,int req_comp);
+void Free();
    private:
-    void Free();
+    
     std::string imagePath;
     uByte* data;
     int width,height,channels;

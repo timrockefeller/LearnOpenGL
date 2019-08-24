@@ -11,12 +11,12 @@ Image::Image() : data(NULL), width(0), height(0), channels(0) {}
 Image::~Image() {
     Free();
 }
-Image::Image(const char* imagePath_,int req_comp) : width(0), height(0), channels(req_comp) {
-    Load(imagePath_, req_comp);
+Image::Image(const char* imagePath_,bool flip,int req_comp) : width(0), height(0), channels(req_comp) {
+    Load(imagePath_,flip, req_comp);
 }
-void Image::Load(const char* imagePath_,int req_comp){
+void Image::Load(const char* imagePath_,bool flip, int req_comp){
     //Free();
-    stbi_set_flip_vertically_on_load(true);
+    stbi_set_flip_vertically_on_load(flip);
     if (imagePath_) {
         data = stbi_load(imagePath_, &width, &height, &channels, req_comp);
         imagePath = imagePath_;
@@ -25,9 +25,6 @@ void Image::Load(const char* imagePath_,int req_comp){
 void Image::Free(){ 
     // TODO
     stbi_image_free(data);
-    if(data){
-        delete[] data;
-    }
     data = NULL;
 }
 

@@ -1,6 +1,7 @@
 #include <LOGL/Glfw.h>
 #include <LOGL/Shader.h>
-#include <Util/Image.h>
+// #include <Util/Image.h>
+#include <LOGL/Texture.h>
 #include <Util/OpQueue.h>
 #include <cmath>
 #include <glm/glm.hpp>
@@ -54,31 +55,33 @@ int main(int argc, char const* argv[]) {
     glEnableVertexAttribArray(2);
 
     // textures
-    unsigned int textures[2];
-    glGenTextures(2, textures);
 
-    glBindTexture(GL_TEXTURE_2D, textures[0]);
-    Image* texImage1 = new Image("assets/textures/container.jpg");
-    if (texImage1->isValid()) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texImage1->getWidth(),
-                     texImage1->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE,
-                     texImage1->getData());
-        glGenerateMipmap(GL_TEXTURE_2D);
-    } else {
-        cout << "Failed to load texture" << endl;
-    }
+    // unsigned int textures[2];
+    // glGenTextures(2, textures);
 
-    glBindTexture(GL_TEXTURE_2D, textures[1]);
-    Image* texImage2 = new Image("assets/textures/awesomeface.png");
-    if (texImage2->isValid()) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texImage2->getWidth(),
-                     texImage2->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     texImage2->getData());
-        glGenerateMipmap(GL_TEXTURE_2D);
-    } else {
-        cout << "Failed to load texture" << endl;
-    }
+    // glBindTexture(GL_TEXTURE_2D, textures[0]);
+    // Image* texImage1 = new Image("assets/textures/container.jpg");
+    // if (texImage1->isValid()) {
+    //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texImage1->getWidth(),
+    //                  texImage1->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE,
+    //                  texImage1->getData());
+    //     glGenerateMipmap(GL_TEXTURE_2D);
+    // } else {
+    //     cout << "Failed to load texture" << endl;
+    // }
 
+    // glBindTexture(GL_TEXTURE_2D, textures[1]);
+    // Image* texImage2 = new Image("assets/textures/awesomeface.png");
+    // if (texImage2->isValid()) {
+    //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texImage2->getWidth(),
+    //                  texImage2->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
+    //                  texImage2->getData());
+    //     glGenerateMipmap(GL_TEXTURE_2D);
+    // } else {
+    //     cout << "Failed to load texture" << endl;
+    // }
+    Texture texture1("assets/textures/container.jpg"),
+        texture2("assets/textures/awesomeface.png", true);
     // shaders
     Shader* shader =
         new Shader("src/01_Introduction/05_Transform/vertex.vs",
@@ -102,10 +105,13 @@ int main(int argc, char const* argv[]) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glActiveTexture(GL_TEXTURE0);  // 在绑定纹理之前先激活纹理单元
-        glBindTexture(GL_TEXTURE_2D, textures[0]);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, textures[1]);
+        // glActiveTexture(GL_TEXTURE0);  // 在绑定纹理之前先激活纹理单元
+        // glBindTexture(GL_TEXTURE_2D, textures[0]);
+        // glActiveTexture(GL_TEXTURE1);
+        // glBindTexture(GL_TEXTURE_2D, textures[1]);
+
+        texture1.setUnit(0);
+        texture2.setUnit(1);
 
         glm::mat4 trans = glm::mat4(1.0f);
         trans = glm::rotate(trans, (float)glfwGetTime(),  // swap
