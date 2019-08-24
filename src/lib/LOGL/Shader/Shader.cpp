@@ -66,24 +66,32 @@ Shader::~Shader() {
     glDeleteProgram(shaderProgram);
 }
 
-void Shader::Use() {
+void Shader::Use() const {
     if (isValid())
         glUseProgram(shaderProgram);
 }
 
-bool Shader::isValid() {
+bool Shader::isValid() const {
     return glIsProgram(shaderProgram);
 }
 
-void Shader::setBool(const std::string& name, bool value) {
+void Shader::setBool(const std::string& name, bool value) const {
     Use();
     glUniform1i(glGetUniformLocation(shaderProgram, name.c_str()), (int)value);
 }
-void Shader::setInt(const std::string& name, int value) {
+void Shader::setInt(const std::string& name, int value) const {
     Use();
     glUniform1i(glGetUniformLocation(shaderProgram, name.c_str()), value);
 }
-void Shader::setFloat(const std::string& name, float value) {
+void Shader::setFloat(const std::string& name, float value) const {
     Use();
     glUniform1f(glGetUniformLocation(shaderProgram, name.c_str()), value);
+}
+void Shader::SetMat4f(const std::string& name, const float* matValue) const {
+    Use();
+    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name.c_str()), 1,
+                       GL_FALSE, matValue);
+}
+void Shader::setMat4f(const std::string& name, glm::mat4 mat4) const {
+    SetMat4f(name, glm::value_ptr(mat4));
 }
