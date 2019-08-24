@@ -27,6 +27,16 @@ Projects of [LearnOpenGL](https://learnopengl-cn.github.io).
 - VS Code & Cmake plugins
 - gdb
 
+#### Install
+
 相关安装详见[此处](https://blog.iik.moe/2019/08/19/unsorted/cmake-with-vscode/)。
 
 cmake需将输出设置在`./build`下，可以直接使用GDB调试。
+
+### Thanks
+
+Ubpa *[Github](https://github.com/Ubpa)*
+
+Joey de Vries *[Home](https://joeydevries.com/#home)*
+
+Without any licenses.
