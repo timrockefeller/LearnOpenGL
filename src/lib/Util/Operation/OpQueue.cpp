@@ -17,6 +17,12 @@ OpQueue& OpQueue::operator<<(Operation* op) {
     }
     return *this;
 }
+OpQueue& OpQueue::operator<<(const std::function<void()>& op) {
+    if (op != NULL) {
+        queue.push_back(toPtr(new Operation(op)));
+    }
+    return *this;
+}
 void OpQueue::Run() {
     vector<list<Ptr<Operation>>::const_iterator> removeIt;
     for (auto it = queue.cbegin(); it != queue.cend(); ++it) {
@@ -36,4 +42,10 @@ bool OpQueue::isHold() {
 }
 Ptr<Operation> OpQueue::toPtr(Operation* op) {
     return Ptr<Operation>(op, [](Operation* op_) { delete op_; });
+}
+
+OpQueue::~OpQueue(){
+    for (auto it = queue.cbegin(); it != queue.cend();++it){
+        queue.erase(it);
+    }
 }

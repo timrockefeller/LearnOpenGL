@@ -18,6 +18,9 @@ class Glfw {
     void Terminate();
     GLFWwindow* getWindow();
 
+    const std::function<void()> _startOp;
+    const std::function<void()> _endOp;
+
    private:
     GLFWwindow* window;
     static void updateViewport(GLFWwindow* window, int width, int height);

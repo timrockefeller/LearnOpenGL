@@ -5,7 +5,16 @@ using namespace LOGL;
 using namespace KTKR;
 using namespace std;
 
-Glfw::Glfw() : window(NULL) {}
+Glfw::Glfw()
+    : window(NULL),
+      _startOp([&]() {
+          glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+          glClear(GL_COLOR_BUFFER_BIT);
+      }),
+      _endOp([&]() {
+          glfwSwapBuffers(window);
+          glfwPollEvents();
+      }) {}
 
 void Glfw::Init(size_t width, size_t height, const string& title) {
     /* init */
@@ -56,6 +65,6 @@ Glfw* Glfw::getInstance() {
 }
 Glfw* Glfw::instance = new Glfw();
 
-void Glfw::updateViewport(GLFWwindow* window, int width, int height){
+void Glfw::updateViewport(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
