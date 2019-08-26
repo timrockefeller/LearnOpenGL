@@ -5,7 +5,7 @@ using namespace KTKR;
 using namespace LOGL;
 using namespace std;
 int main(int argc, char const* argv[]) {
-    const string title = "01_05: Coordinate System";
+    const string title = "01_06: Coordinate System";
     const uint32_t width = 800;
     const uint32_t height = 600;
     Glfw::getInstance()->Init(width, height, title);
