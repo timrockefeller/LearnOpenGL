@@ -25,6 +25,9 @@ class Camera {
            float pitch);
     */
 
+    void EnableFPS();
+    void DisableFPS();
+
     // Returns the view matrix calculated using Euler Angles and the LookAt
     // Matrix
     glm::mat4 GetViewMatrix();
@@ -71,7 +74,8 @@ class Camera {
     float MouseSensitivity;
     float Zoom;
     float RationWH;
-
+    bool FPS;
+    
     // Calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors();
 };

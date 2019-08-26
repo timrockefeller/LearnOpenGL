@@ -17,7 +17,8 @@ Camera::Camera(float rationWH,
     : Front(glm::vec3(0.0f, 0.0f, -1.0f)),
       MovementSpeed(SPEED),
       MouseSensitivity(SENSITIVITY),
-      Zoom(ZOOM) {
+      Zoom(ZOOM),
+      FPS(false) {
     Position = position;
     WorldUp = up;
     Yaw = yaw;
@@ -57,10 +58,11 @@ glm::mat4 Camera::GetProjectionMatrix() {
 
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
     float velocity = MovementSpeed * deltaTime;
+    glm::vec3 front = glm::normalize(Front * (FPS ? glm::vec3(1, 0, 1) : glm::vec3(1)));
     if (direction == CAM_FORWARD)
-        Position += Front * velocity;
+        Position += front * velocity;
     if (direction == CAM_BACKWARD)
-        Position -= Front * velocity;
+        Position -= front * velocity;
     if (direction == CAM_LEFT)
         Position -= Right * velocity;
     if (direction == CAM_RIGHT)
@@ -110,4 +112,11 @@ void Camera::updateCameraVectors() {
                              closer to 0 the more you look up or down which
                              results in slower movement.*/
     Up = glm::normalize(glm::cross(Right, Front));
+}
+
+void Camera::EnableFPS() {
+    FPS = true;
+}
+void Camera::DisableFPS() {
+    FPS = false;
 }
