@@ -30,9 +30,7 @@ int main(int argc, char const* argv[]) {
     glfwSetCursorPosCallback(Glfw::getInstance()->getWindow(), mouse_callback);
     glfwSetScrollCallback(Glfw::getInstance()->getWindow(), scroll_callback);
 
-    // tell GLFW to capture our mouse
-    glfwSetInputMode(Glfw::getInstance()->getWindow(), GLFW_CURSOR,
-                     GLFW_CURSOR_DISABLED);
+    
 
     // objects
     float vertices[] = {
@@ -191,9 +189,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     }
 
     float xoffset = (float)xpos - lastX;
-    float yoffset =
-        lastY -
-        (float)ypos;  // reversed since y-coordinates go from bottom to top
+    float yoffset = lastY - (float)ypos;
+    // reversed since y-coordinates go from bottom to top
 
     lastX = (float)xpos;
     lastY = (float)ypos;
