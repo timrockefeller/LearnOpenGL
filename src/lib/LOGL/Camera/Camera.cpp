@@ -50,6 +50,20 @@ Camera::Camera(float posX,
 
 glm::mat4 Camera::GetViewMatrix() {
     return glm::lookAt(Position, Position + Front, Up);
+    // glm::mat4 a(1), b(1);// didnot work ;c
+    // a[0][0] = Right.x;
+    // a[0][1] = Right.y;
+    // a[0][2] = Right.z;
+    // a[1][0] = Up.x;
+    // a[1][1] = Up.y;
+    // a[1][2] = Up.z;
+    // a[2][0] = Front.x;
+    // a[2][1] = Front.y;
+    // a[2][2] = Front.z;
+    // b[0][3] = -Position.x;
+    // b[1][3] = -Position.y;
+    // b[2][3] = -Position.z;
+    // return a * b;
 }
 
 glm::mat4 Camera::GetProjectionMatrix() {
@@ -58,7 +72,8 @@ glm::mat4 Camera::GetProjectionMatrix() {
 
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
     float velocity = MovementSpeed * deltaTime;
-    glm::vec3 front = glm::normalize(Front * (FPS ? glm::vec3(1, 0, 1) : glm::vec3(1)));
+    glm::vec3 front =
+        glm::normalize(Front * (FPS ? glm::vec3(1, 0, 1) : glm::vec3(1)));
     if (direction == CAM_FORWARD)
         Position += front * velocity;
     if (direction == CAM_BACKWARD)
