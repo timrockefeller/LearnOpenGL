@@ -15,8 +15,8 @@ Glfw::Glfw()
           glfwSwapBuffers(window);
           glfwPollEvents();
       }) {}
-Glfw::~Glfw(){
-    delete instance;
+Glfw::~Glfw() {
+    //delete instance;
 }
 void Glfw::Init(size_t width, size_t height, const string& title) {
     /* init */
@@ -42,6 +42,24 @@ void Glfw::Init(size_t width, size_t height, const string& title) {
     }
     glViewport(0, 0, width, height);
     glfwSetFramebufferSizeCallback(window, updateViewport);
+
+    // bind events
+    /*
+        glfwSetCursorPosCallback(window,
+                                 [](GLFWwindow* window, double xpos, double
+       ypos) { static float lastX = (float)xpos; static float lastY =
+       (float)ypos;
+
+                                     float xoffset = (float)xpos - lastX;
+                                     float yoffset = lastY - (float)ypos;
+
+                                     lastX = (float)xpos;
+                                     lastY = (float)ypos;
+                                 });*/
+
+    // tell GLFW to capture our mouse
+    glfwSetInputMode(window, GLFW_CURSOR,
+                     GLFW_CURSOR_DISABLED);
 }
 
 void Glfw::CloseWindow() {
@@ -63,10 +81,10 @@ void Glfw::Run(OpQueue* opList) {
     return;
 }
 
-Glfw* Glfw::getInstance() {
-    return instance;
-}
-Glfw* Glfw::instance = new Glfw();
+// Glfw* Glfw::getInstance() {
+//     return instance;
+// }
+// Glfw* Glfw::instance = new Glfw();
 
 void Glfw::updateViewport(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);

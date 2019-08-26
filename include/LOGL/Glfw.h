@@ -2,17 +2,18 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <Util/OpQueue.h>
+#include <Util/Singleton.h>
 #include <string>
 
 namespace LOGL {
-class Glfw {
+class Glfw : public KTKR::Singleton<Glfw>{
    public:
-    static Glfw* getInstance();
+    //static Glfw* getInstance();
     void Init(size_t width = 800, size_t height = 600, const std::string & title = "Title");
     
     Glfw();
     ~Glfw();
-    static Glfw* instance;
+    
     
     void Run(KTKR::OpQueue *opList);
     void CloseWindow();
@@ -23,6 +24,7 @@ class Glfw {
     const std::function<void()> _endOp;
 
    private:
+   //static Glfw* instance;
     GLFWwindow* window;
     static void updateViewport(GLFWwindow* window, int width, int height);
 };
