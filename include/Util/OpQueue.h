@@ -16,7 +16,9 @@ class OpQueue {
     std::list<Ptr<Operation>> queue;
     void Run();
     bool isHold();
-    static Ptr<Operation> toPtr(Operation* op);
+
+    template <typename T>
+    static Ptr<T> toPtr(T* op);
 
    protected:
     bool hold;

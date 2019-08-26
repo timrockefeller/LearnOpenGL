@@ -40,8 +40,10 @@ void OpQueue::Run() {
 bool OpQueue::isHold() {
     return hold;
 }
-Ptr<Operation> OpQueue::toPtr(Operation* op) {
-    return Ptr<Operation>(op, [](Operation* op_) { delete op_; });
+
+template <typename T>
+Ptr<T> OpQueue::toPtr(T* op) {
+    return Ptr<T>(op, [](T* op_) { delete op_; });
 }
 
 OpQueue::~OpQueue() {
