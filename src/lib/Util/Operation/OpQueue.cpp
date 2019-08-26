@@ -3,7 +3,7 @@
 using namespace KTKR;
 using namespace std;
 
-OpQueue::OpQueue():hold(true),queue(std::list<Ptr<Operation>>()){}
+OpQueue::OpQueue() : hold(true), queue(std::list<Ptr<Operation>>()) {}
 
 OpQueue& OpQueue::operator<<(Ptr<Operation> op) {
     if (op != NULL) {
@@ -44,8 +44,12 @@ Ptr<Operation> OpQueue::toPtr(Operation* op) {
     return Ptr<Operation>(op, [](Operation* op_) { delete op_; });
 }
 
-OpQueue::~OpQueue(){
-    for (auto it = queue.cbegin(); it != queue.cend();++it){
-        queue.erase(it);
+OpQueue::~OpQueue() {
+    //clean all
+    vector<list<Ptr<Operation>>::const_iterator> removeIt;
+    for (auto it = queue.cbegin(); it != queue.cend(); ++it) {
+        removeIt.push_back(it);
     }
+    for (int i = removeIt.size() - 1; i >= 0; i--)
+        queue.erase(removeIt[i]);
 }

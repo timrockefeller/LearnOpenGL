@@ -1,4 +1,5 @@
 #pragma once
+#include <glad/glad.h>
 #include <string>
 
 namespace LOGL {
@@ -14,10 +15,10 @@ class Texture {
               bool flip = false,
               bool gammaCorrection = false  // TODO
     );
-    bool setUnit(unsigned int unit = 0) const;
-    unsigned int GetID() const;
+    bool setUnit(GLuint unit = 0) const;
+    GLuint GetID() const;
    private:
-    unsigned int ID;
+    GLuint ID;
 };
 
 }  // namespace LOGL

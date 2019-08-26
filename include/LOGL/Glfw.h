@@ -11,6 +11,7 @@ class Glfw {
     void Init(size_t width = 800, size_t height = 600, const std::string & title = "Title");
     
     Glfw();
+    ~Glfw();
     static Glfw* instance;
     
     void Run(KTKR::OpQueue *opList);

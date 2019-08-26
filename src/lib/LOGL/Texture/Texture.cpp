@@ -13,7 +13,7 @@ bool Texture::IsValid() const {
     return ID != 0;
 }
 
-unsigned int Texture::GetID() const {
+GLuint Texture::GetID() const {
     return ID;
 }
 
@@ -68,7 +68,7 @@ bool Texture::Load(const std::string& path, bool flip, bool gammaCorrection) {
     img.Free();
 }
 
-bool Texture::setUnit(unsigned int unit) const {
+bool Texture::setUnit(GLuint unit) const {
     if (!IsValid())
         return false;
 

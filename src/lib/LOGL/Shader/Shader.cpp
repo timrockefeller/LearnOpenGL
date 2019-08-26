@@ -62,6 +62,10 @@ Shader::Shader(const string& vertexShaderPath,
     glDeleteShader(fragmentShader);
 }
 
+GLuint Shader::GetID() const {
+    return ID;
+}
+
 Shader::~Shader() {
     glDeleteProgram(ID);
 }
@@ -87,11 +91,11 @@ void Shader::setFloat(const std::string& name, float value) const {
     Use();
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
-void Shader::SetMat4f(const std::string& name, const float* matValue) const {
+void Shader::setMat4f(const std::string& name, const float* matValue) const {
     Use();
     glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1,
                        GL_FALSE, matValue);
 }
 void Shader::setMat4f(const std::string& name, glm::mat4 mat4) const {
-    SetMat4f(name, glm::value_ptr(mat4));
+    setMat4f(name, glm::value_ptr(mat4));
 }

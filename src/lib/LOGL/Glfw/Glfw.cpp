@@ -15,7 +15,9 @@ Glfw::Glfw()
           glfwSwapBuffers(window);
           glfwPollEvents();
       }) {}
-
+Glfw::~Glfw(){
+    delete instance;
+}
 void Glfw::Init(size_t width, size_t height, const string& title) {
     /* init */
     glfwInit();
@@ -58,6 +60,7 @@ void Glfw::Run(OpQueue* opList) {
         // TODO
     }
     Terminate();
+    return;
 }
 
 Glfw* Glfw::getInstance() {
