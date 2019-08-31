@@ -13,8 +13,7 @@ using namespace std;
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 // camera
-Camera camera((float)SCR_WIDTH / (float)SCR_HEIGHT,
-              glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
 // timing
 float deltaTime = 0.0f;  // time between current frame and last frame
