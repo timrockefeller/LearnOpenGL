@@ -58,3 +58,20 @@ Normal = mat3(transpose(inverse(model))) * aNormal;
 ## 镜面光照
 
 ![img](https://learnopengl-cn.github.io/img/02/02/basic_lighting_specular.png)
+
+## GLSL 几何函数
+
+| 函数                                  | 描述                                                  |
+| :------------------------------------ | :---------------------------------------------------- |
+| float length(vec2/vec3/vec4 x)        | 返回x向量的长度                                       |
+| float distance(vec p0,vec p1)         | 返回p0和p1之间的距离                                  |
+| float dot(vec x,vec y)                | 返回x和y的点乘结果                                    |
+| vec3 cross(vec3 x,vec3 y)             | 返回x和y的叉乘结果                                    |
+| vec normalize(vec x)                  | 返回和x方向相同的单位长度向量                         |
+| vec faceforward(vec N,vec I,vec nRef) | 如果dot(Nref,l)<0则返回N，否则返回-N                  |
+| vec reflect(vec l,vec N)              | 返回入射向量l的反射方向和表面法线方向N                |
+| vec refract(vec vec N,float eta)      | 返回入射向量l的反射方向、表面法线方向N和折射指数比eta |
+
+```c
+reflect(-A,B) == - reflect(A,B) //true
+```
