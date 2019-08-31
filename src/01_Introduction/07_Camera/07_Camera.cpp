@@ -140,13 +140,13 @@ int main(int argc, char const* argv[]) {
         ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_ESCAPE,
                []() { Glfw::getInstance()->CloseWindow(); })
         ->bind(EventListener::KEYBOARD | GLFW_KEY_W,
-               []() { camera.ProcessKeyboard(CAM_FORWARD, deltaTime); })
+               []() { camera.ProcessKeyboard(CAM_FORWARD); })
         ->bind(EventListener::KEYBOARD | GLFW_KEY_S,
-               []() { camera.ProcessKeyboard(CAM_BACKWARD, deltaTime); })
+               []() { camera.ProcessKeyboard(CAM_BACKWARD); })
         ->bind(EventListener::KEYBOARD | GLFW_KEY_A,
-               []() { camera.ProcessKeyboard(CAM_LEFT, deltaTime); })
+               []() { camera.ProcessKeyboard(CAM_LEFT); })
         ->bind(EventListener::KEYBOARD | GLFW_KEY_D,
-               []() { camera.ProcessKeyboard(CAM_RIGHT, deltaTime); });
+               []() { camera.ProcessKeyboard(CAM_RIGHT); });
 
     // loop
     OpQueue opList;
@@ -155,9 +155,6 @@ int main(int argc, char const* argv[]) {
         [&]() {
             // per-frame time logic
             // --------------------
-            float currentFrame = glfwGetTime();
-            deltaTime = currentFrame - lastFrame;
-            lastFrame = currentFrame;
 
             // pass projection matrix to shader (note that in this case it could
             // change every frame)

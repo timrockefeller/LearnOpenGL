@@ -20,11 +20,14 @@ class Glfw : public KTKR::Singleton<Glfw>{
     void Terminate();
     GLFWwindow* getWindow();
 
+    float deltaTime;
+
     const std::function<void()> _startOp;
     const std::function<void()> _endOp;
-
    private:
-   //static Glfw* instance;
+
+    float lastTime;
+    // static Glfw* instance;
     GLFWwindow* window;
     static void updateViewport(GLFWwindow* window, int width, int height);
 };

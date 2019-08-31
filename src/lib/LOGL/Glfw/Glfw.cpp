@@ -13,6 +13,9 @@ Glfw::Glfw()
       _startOp([&]() {
           glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
           glClear(GL_COLOR_BUFFER_BIT);
+          float ct = (float)glfwGetTime();
+          deltaTime = ct - lastTime;
+          lastTime = ct;
       }),
       _endOp([&]() {
           glfwSwapBuffers(window);
