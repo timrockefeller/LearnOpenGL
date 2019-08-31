@@ -15,9 +15,6 @@ const unsigned int SCR_HEIGHT = 600;
 // camera
 Camera camera((float)SCR_WIDTH / (float)SCR_HEIGHT,
               glm::vec3(0.0f, 0.0f, 3.0f));
-float lastX = SCR_WIDTH / 2.0f;
-float lastY = SCR_HEIGHT / 2.0f;
-bool firstMouse = true;
 
 // timing
 float deltaTime = 0.0f;  // time between current frame and last frame
@@ -142,13 +139,13 @@ int main(int argc, char const* argv[]) {
             })
         ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_ESCAPE,
                []() { Glfw::getInstance()->CloseWindow(); })
-        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_W,
+        ->bind(EventListener::KEYBOARD | GLFW_KEY_W,
                []() { camera.ProcessKeyboard(CAM_FORWARD, deltaTime); })
-        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_S,
+        ->bind(EventListener::KEYBOARD | GLFW_KEY_S,
                []() { camera.ProcessKeyboard(CAM_BACKWARD, deltaTime); })
-        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_A,
+        ->bind(EventListener::KEYBOARD | GLFW_KEY_A,
                []() { camera.ProcessKeyboard(CAM_LEFT, deltaTime); })
-        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_D,
+        ->bind(EventListener::KEYBOARD | GLFW_KEY_D,
                []() { camera.ProcessKeyboard(CAM_RIGHT, deltaTime); });
 
     // loop
@@ -162,7 +159,6 @@ int main(int argc, char const* argv[]) {
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
 
-            processInput(Glfw::getInstance()->getWindow());
             // pass projection matrix to shader (note that in this case it could
             // change every frame)
             glm::mat4 projection = camera.GetProjectionMatrix();
