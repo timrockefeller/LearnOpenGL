@@ -1,0 +1,5 @@
+set(MODE "EXE")
+
+set(TARGET_PREFIX "02_")
+
+ADD_ALL_SUBDIR()

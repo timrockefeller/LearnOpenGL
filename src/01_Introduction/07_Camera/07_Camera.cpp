@@ -1,14 +1,17 @@
 #include <LOGL/Camera.h>
+#include <LOGL/Common.h>
 #include <LOGL/Glfw.h>
 #include <LOGL/Shader.h>
 #include <LOGL/Texture.h>
+#include <Util/EventListener.h>
+#include <Util/GStorage.h>
 using namespace KTKR;
 using namespace LOGL;
 using namespace std;
 
 void processInput(GLFWwindow* window);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+//void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+//void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -27,10 +30,9 @@ int main(int argc, char const* argv[]) {
     const string title = "01_07: Camera";
     Glfw::getInstance()->Init(SCR_WIDTH, SCR_HEIGHT, title);
 
-    glfwSetCursorPosCallback(Glfw::getInstance()->getWindow(), mouse_callback);
-    glfwSetScrollCallback(Glfw::getInstance()->getWindow(), scroll_callback);
-
-    
+    // glfwSetCursorPosCallback(Glfw::getInstance()->getWindow(),
+    // mouse_callback);
+    // glfwSetScrollCallback(Glfw::getInstance()->getWindow(), scroll_callback);
 
     // objects
     float vertices[] = {
@@ -122,6 +124,23 @@ int main(int argc, char const* argv[]) {
     glEnable(GL_DEPTH_TEST);
     camera.EnableFPS();
 
+    // event
+    EventListener::getInstance()->bind(
+        EventListener::Event_Type::MOUSE_SCROLL, []() {
+            float* r = GStorage<float>::getInstance()->getPtr(strMouseScrollY);
+            if (r)
+                camera.ProcessMouseScroll(*r);
+        });
+    EventListener::getInstance()->bind(
+        EventListener::Event_Type::MOUSE_MOVE, []() {
+            float *xoffset =
+                      GStorage<float>::getInstance()->getPtr(strMousePosX),
+                  *yoffset =
+                      GStorage<float>::getInstance()->getPtr(strMousePosY);
+            if (xoffset && yoffset)
+                camera.ProcessMouseMovement(*xoffset, *yoffset);
+        });
+
     // loop
     OpQueue opList;
     opList << [&]() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
@@ -179,27 +198,27 @@ void processInput(GLFWwindow* window) {
         camera.ProcessKeyboard(CAM_RIGHT, deltaTime);
 }
 
-// glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
-void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-    if (firstMouse) {
-        lastX = (float)xpos;
-        lastY = (float)ypos;
-        firstMouse = false;
-    }
+// // glfw: whenever the mouse moves, this callback is called
+// // -------------------------------------------------------
+// void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+//     if (firstMouse) {
+//         lastX = (float)xpos;
+//         lastY = (float)ypos;
+//         firstMouse = false;
+//     }
 
-    float xoffset = (float)xpos - lastX;
-    float yoffset = lastY - (float)ypos;
-    // reversed since y-coordinates go from bottom to top
+//     float xoffset = (float)xpos - lastX;
+//     float yoffset = lastY - (float)ypos;
+//     // reversed since y-coordinates go from bottom to top
 
-    lastX = (float)xpos;
-    lastY = (float)ypos;
+//     lastX = (float)xpos;
+//     lastY = (float)ypos;
 
-    camera.ProcessMouseMovement(xoffset, yoffset);
-}
+//     camera.ProcessMouseMovement(xoffset, yoffset);
+// }
 
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-    camera.ProcessMouseScroll((float)yoffset);
-}
+// // glfw: whenever the mouse scroll wheel scrolls, this callback is called
+// // ----------------------------------------------------------------------
+// void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+//     camera.ProcessMouseScroll((float)yoffset);
+// }
