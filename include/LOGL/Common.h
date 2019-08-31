@@ -5,6 +5,10 @@
 namespace LOGL {
 // Common Define
 
+static float DEFAULT_WIDTH = 800.f;
+
+static float DEFAULT_HEIGHT = 600.f;
+
 /// event bridge ///
 
 // mouse scroll x offset
