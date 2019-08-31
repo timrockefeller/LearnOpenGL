@@ -43,7 +43,7 @@ bool OpQueue::isHold() {
 
 template <typename T>
 Ptr<T> OpQueue::toPtr(T* op) {
-    return Ptr<T>(op, [](T* op_) { delete op_; });
+    return Ptr<T>(op, [&](T* op_) { delete op_; });
 }
 
 OpQueue::~OpQueue() {
