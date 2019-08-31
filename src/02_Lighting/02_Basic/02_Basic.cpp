@@ -128,6 +128,10 @@ int main(int argc, char const* argv[]) {
             glBindVertexArray(cubeVAO);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
+            // move light
+            lightPos = glm::vec3(1.2f * glm::cos(glfwGetTime()), 1.0f,
+                                 2.0f * glm::sin(glfwGetTime()));
+
             lampShader->Use();
             // 设置模型、视图和投影矩阵uniform
             lampShader->setMat4f("projection", projection);

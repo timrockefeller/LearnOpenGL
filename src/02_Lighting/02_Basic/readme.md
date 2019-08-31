@@ -55,6 +55,12 @@ Normal = mat3(transpose(inverse(model))) * aNormal;
 
 >即使是对于着色器来说，逆矩阵也是一个开销比较大的运算，因此，只要可能就应该避免在着色器中进行逆矩阵运算，它们必须为你场景中的每个顶点都进行这样的处理。用作学习目这样做是可以的，但是对于一个对效率有要求的应用来说，在绘制之前你最好用CPU计算出法线矩阵，然后通过uniform把值传递给着色器（像模型矩阵一样）。
 
+证明：
+
+![](provation1.png)
+
+![](provation2.png)
+
 ## 镜面光照
 
 ![img](https://learnopengl-cn.github.io/img/02/02/basic_lighting_specular.png)
