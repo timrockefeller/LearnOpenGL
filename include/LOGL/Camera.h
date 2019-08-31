@@ -8,7 +8,7 @@ enum Camera_Movement { CAM_FORWARD, CAM_BACKWARD, CAM_LEFT, CAM_RIGHT };
 class Camera {
    public:
     // Constructor with vectors
-    Camera(float rationWH,
+    Camera(float rationWH = (float)800 / (float)600,
            glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
            glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
            float yaw = YAW,
@@ -75,7 +75,7 @@ class Camera {
     float Zoom;
     float RationWH;
     bool FPS;
-    
+
     // Calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors();
 };
