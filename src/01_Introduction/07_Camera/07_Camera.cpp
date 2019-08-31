@@ -10,8 +10,8 @@ using namespace LOGL;
 using namespace std;
 
 void processInput(GLFWwindow* window);
-//void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-//void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+// void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+// void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -125,21 +125,34 @@ int main(int argc, char const* argv[]) {
     camera.EnableFPS();
 
     // event
-    EventListener::getInstance()->bind(
-        EventListener::Event_Type::MOUSE_SCROLL, []() {
-            float* r = GStorage<float>::getInstance()->getPtr(strMouseScrollY);
-            if (r)
-                camera.ProcessMouseScroll(*r);
-        });
-    EventListener::getInstance()->bind(
-        EventListener::Event_Type::MOUSE_MOVE, []() {
-            float *xoffset =
-                      GStorage<float>::getInstance()->getPtr(strMousePosX),
-                  *yoffset =
-                      GStorage<float>::getInstance()->getPtr(strMousePosY);
-            if (xoffset && yoffset)
-                camera.ProcessMouseMovement(*xoffset, *yoffset);
-        });
+    EventListener::getInstance()
+        ->bind(EventListener::Event_Type::MOUSE_SCROLL,
+               []() {
+                   float* r =
+                       GStorage<float>::getInstance()->getPtr(strMouseScrollY);
+                   if (r)
+                       camera.ProcessMouseScroll(*r);
+               })
+        ->bind(
+            EventListener::Event_Type::MOUSE_MOVE,
+            []() {
+                float *xoffset =
+                          GStorage<float>::getInstance()->getPtr(strMousePosX),
+                      *yoffset =
+                          GStorage<float>::getInstance()->getPtr(strMousePosY);
+                if (xoffset && yoffset)
+                    camera.ProcessMouseMovement(*xoffset, *yoffset);
+            })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_ESCAPE,
+               []() { Glfw::getInstance()->CloseWindow(); })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_W,
+               []() { camera.ProcessKeyboard(CAM_FORWARD, deltaTime); })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_S,
+               []() { camera.ProcessKeyboard(CAM_BACKWARD, deltaTime); })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_A,
+               []() { camera.ProcessKeyboard(CAM_LEFT, deltaTime); })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_D,
+               []() { camera.ProcessKeyboard(CAM_RIGHT, deltaTime); });
 
     // loop
     OpQueue opList;
