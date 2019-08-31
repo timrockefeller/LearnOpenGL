@@ -9,9 +9,6 @@ using namespace KTKR;
 using namespace LOGL;
 using namespace std;
 
-void processInput(GLFWwindow* window);
-// void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-// void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -193,45 +190,3 @@ int main(int argc, char const* argv[]) {
     glDeleteBuffers(1, &VBO);
     return 0;
 }
-
-// process all input: query GLFW whether relevant keys are pressed/released this
-// frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow* window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(CAM_FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(CAM_BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(CAM_LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(CAM_RIGHT, deltaTime);
-}
-
-// // glfw: whenever the mouse moves, this callback is called
-// // -------------------------------------------------------
-// void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-//     if (firstMouse) {
-//         lastX = (float)xpos;
-//         lastY = (float)ypos;
-//         firstMouse = false;
-//     }
-
-//     float xoffset = (float)xpos - lastX;
-//     float yoffset = lastY - (float)ypos;
-//     // reversed since y-coordinates go from bottom to top
-
-//     lastX = (float)xpos;
-//     lastY = (float)ypos;
-
-//     camera.ProcessMouseMovement(xoffset, yoffset);
-// }
-
-// // glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// // ----------------------------------------------------------------------
-// void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-//     camera.ProcessMouseScroll((float)yoffset);
-// }
