@@ -9,9 +9,9 @@ const float Camera::SPEED = 2.5f;
 const float Camera::SENSITIVITY = 0.1f;
 const float Camera::ZOOM = 45.0f;
 
-Camera::Camera(float rationWH,
-               glm::vec3 position,
+Camera::Camera(glm::vec3 position,
                glm::vec3 up,
+               float rationWH,
                float yaw,
                float pitch)
     : Front(glm::vec3(0.0f, 0.0f, -1.0f)),
