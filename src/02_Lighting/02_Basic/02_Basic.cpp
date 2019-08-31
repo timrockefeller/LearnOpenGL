@@ -123,6 +123,7 @@ int main(int argc, char const* argv[]) {
             lightingShader->setVec3f("objectColor", 1.0f, 0.5f, 0.31f);
             lightingShader->setVec3f("lightColor", 1.0f, 1.0f, 1.0f);
             lightingShader->setVec3f("lightPos", lightPos);
+            lightingShader->setVec3f("viewPos", camera.GetPosition());
 
             glBindVertexArray(cubeVAO);
             glDrawArrays(GL_TRIANGLES, 0, 36);

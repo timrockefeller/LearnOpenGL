@@ -35,6 +35,8 @@ class Camera {
     // Returns the projection matrix calculated using Zoom
     glm::mat4 GetProjectionMatrix();
 
+    glm::vec3 GetPosition() const;
+
     // Processes input received from any keyboard-like input system. Accepts
     // input parameter in the form of camera defined ENUM (to abstract it from
     // windowing systems)

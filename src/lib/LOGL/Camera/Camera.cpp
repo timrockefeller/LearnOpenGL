@@ -84,6 +84,10 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
         Position += Right * velocity;
 }
 
+glm::vec3 Camera::GetPosition() const {
+    return Position;
+}
+
 void Camera::ProcessMouseMovement(float xoffset,
                                   float yoffset,
                                   GLboolean constrainPitch) {
