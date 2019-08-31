@@ -17,7 +17,7 @@ Glfw::Glfw()
       _endOp([&]() {
           glfwSwapBuffers(window);
           glfwPollEvents();
-      }) {}
+      }){}
 Glfw::~Glfw() {
     // delete instance;
 }
@@ -75,16 +75,15 @@ void Glfw::Init(size_t width, size_t height, const string& title) {
     glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scanCode,
                                   int state, int mods) {
         size_t kbState =
-            (state == GLFW_PRESS
-                 ? EventListener::KEYBOARD_PRESS
-                 : (state == GLFW_REPEAT ? EventListener::KEYBOARD_REPEAT
-                                         : (state == GLFW_RELEASE
-                                                ? EventListener::KEYBOARD_RELEASE
-                                                : 0)));
+            (state == GLFW_PRESS ? EventListener::KEYBOARD_PRESS
+                                 : (state == GLFW_REPEAT
+                                        ? EventListener::KEYBOARD_REPEAT
+                                        : (state == GLFW_RELEASE
+                                               ? EventListener::KEYBOARD_RELEASE
+                                               : 0)));
         if (kbState != 0)
             EventListener::getInstance()->response(key | kbState);
-        EventListener::getInstance()->response(
-            key | EventListener::KEYBOARD);
+        EventListener::getInstance()->response(key | EventListener::KEYBOARD);
     });
 
     // tell GLFW to capture our mouse
@@ -117,4 +116,5 @@ void Glfw::Run(OpQueue* opList) {
 
 void Glfw::updateViewport(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
+    EventListener::getInstance()->response(EventListener::WINDOW_ZOOM);
 }
