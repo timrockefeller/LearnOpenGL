@@ -19,6 +19,10 @@ Projects of [LearnOpenGL](https://learnopengl-cn.github.io).
 - 绞尽脑汁抽象却没成功的类
 - 由于库特性导致的面向过程瞎子
 
+### notes
+
+- [Phong基础光照](./src/02_Lighting/02_Basic/readme.md)
+
 ### 部署
 
 #### Requirements

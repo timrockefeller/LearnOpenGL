@@ -65,6 +65,14 @@ Normal = mat3(transpose(inverse(model))) * aNormal;
 
 ![img](https://learnopengl-cn.github.io/img/02/02/basic_lighting_specular.png)
 
+对每一个FragPos进行视角方向计算，再同光源反射先点乘，得出反光强度。
+
+```c
+float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+```
+
+此处32是**Shininess**(反射因子)，越大则镜面反射效果越强，即表现得更光滑，反之更粗糙。
+
 ## GLSL 几何函数
 
 | 函数                                  | 描述                                                  |
