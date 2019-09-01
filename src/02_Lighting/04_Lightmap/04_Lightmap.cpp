@@ -90,7 +90,8 @@ int main(int argc, char const* argv[]) {
         glEnableVertexAttribArray(0);
     }
     Texture tex_deffuse("./assets/textures/container2.png"),
-        tex_specular("./assets/textures/container2_specular.png");
+        tex_specular("./assets/textures/lighting_maps_specular_color.png"),
+        tex_emission("./assets/textures/matrix.jpg");
     Shader* lightingShader =
         new Shader("./src/02_Lighting/04_Lightmap/vertex.vs",
                    "./src/02_Lighting/04_Lightmap/frag_lighting.fs");
@@ -99,6 +100,7 @@ int main(int argc, char const* argv[]) {
                    "./src/02_Lighting/04_Lightmap/frag_lamp.fs");
     lightingShader->setInt("material.diffuse", 0);
     lightingShader->setInt("material.specular", 1);
+    lightingShader->setInt("material.emission", 2);
     lightingShader->setFloat("material.shininess", 0.4f * 128);
     lightingShader->setVec3f("light.ambient", 0.2f, 0.2f, 0.2f);
     lightingShader->setVec3f("light.diffuse", 0.5f, 0.5f, 0.5f);
@@ -141,26 +143,27 @@ int main(int argc, char const* argv[]) {
             // move light
             lightPos = glm::vec3(1.2f * glm::cos(glfwGetTime()), 1.0f,
                                  2.0f * glm::sin(glfwGetTime()));
-            // change color
-            glm::vec3 lightColor;
-            lightColor.x = sin(glfwGetTime() * 2.0f);
-            lightColor.y = sin(glfwGetTime() * 0.7f);
-            lightColor.z = sin(glfwGetTime() * 1.3f);
-            glm::vec3 diffuseColor = lightColor * glm::vec3(.5f);  //降低影响
-            glm::vec3 ambientColor =
-                diffuseColor * glm::vec3(.2f);  // 很低的影响
+            // // change color
+            // glm::vec3 lightColor;
+            // lightColor.x = sin(glfwGetTime() * 2.0f);
+            // lightColor.y = sin(glfwGetTime() * 0.7f);
+            // lightColor.z = sin(glfwGetTime() * 1.3f);
+            // glm::vec3 diffuseColor = lightColor * glm::vec3(.5f);  //降低影响
+            // glm::vec3 ambientColor =
+            //     diffuseColor * glm::vec3(.2f);  // 很低的影响
 
             lightingShader->Use();
             lightingShader->setMat4f("projection", projection);
             lightingShader->setMat4f("view", view);
             lightingShader->setMat4f("model", model);
-            lightingShader->setVec3f("light.ambient", ambientColor);
-            lightingShader->setVec3f("light.diffuse", diffuseColor);
+            // lightingShader->setVec3f("light.ambient", ambientColor);
+            // lightingShader->setVec3f("light.diffuse", diffuseColor);
             lightingShader->setVec3f("light.position", lightPos);
             lightingShader->setVec3f("viewPos", camera.GetPosition());
             glBindVertexArray(cubeVAO);
             tex_deffuse.setUnit(0);
             tex_specular.setUnit(1);
+            tex_emission.setUnit(2);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
             lampShader->Use();
