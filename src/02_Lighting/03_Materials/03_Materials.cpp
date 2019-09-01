@@ -78,10 +78,10 @@ int main(int argc, char const* argv[]) {
     Shader* lampShader =
         new Shader("./src/02_Lighting/03_Materials/vertex.vs",
                    "./src/02_Lighting/03_Materials/frag_lamp.fs");
-    lightingShader->setVec3f("material.ambient", 0.19225, 0.19225, 0.19225);
-    lightingShader->setVec3f("material.diffuse", 0.50754, 0.50754, 0.50754);
-    lightingShader->setVec3f("material.specular", 0.508273, 0.508273, 0.508273);
-    lightingShader->setFloat("material.shininess", 0.4 * 128);
+    lightingShader->setVec3f("material.ambient", 0.19225f, 0.19225f, 0.19225f);
+    lightingShader->setVec3f("material.diffuse", 0.50754f, 0.50754f, 0.50754f);
+    lightingShader->setVec3f("material.specular", 0.508273f, 0.508273f, 0.508273f);
+    lightingShader->setFloat("material.shininess", 0.4f * 128);
     lightingShader->setVec3f("light.ambient", 0.2f, 0.2f, 0.2f);
     lightingShader->setVec3f("light.diffuse", 0.5f, 0.5f, 0.5f);
     lightingShader->setVec3f("light.specular", 1.0f, 1.0f, 1.0f);
