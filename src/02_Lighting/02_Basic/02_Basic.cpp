@@ -4,6 +4,7 @@
 #include <LOGL/Shader.h>
 #include <Util/EventListener.h>
 #include <Util/GStorage.h>
+#include <iostream>
 using namespace LOGL;
 using namespace KTKR;
 using namespace std;
@@ -91,15 +92,30 @@ int main(int argc, char const* argv[]) {
                    if (r)
                        camera.ProcessMouseScroll(*r);
                })
-        ->bind(EventListener::Event_Type::MOUSE_MOVE, [&]() {
-            float *xoffset =
-                      GStorage<float>::getInstance()->getPtr(strMousePosX),
-                  *yoffset =
-                      GStorage<float>::getInstance()->getPtr(strMousePosY);
-            if (xoffset && yoffset)
-                camera.ProcessMouseMovement(*xoffset, *yoffset);
+        ->bind(
+            EventListener::Event_Type::MOUSE_MOVE,
+            [&]() {
+                float *xoffset =
+                          GStorage<float>::getInstance()->getPtr(strMousePosX),
+                      *yoffset =
+                          GStorage<float>::getInstance()->getPtr(strMousePosY);
+                if (xoffset && yoffset)
+                    camera.ProcessMouseMovement(*xoffset, *yoffset);
+            })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_1,
+               [&]() {
+                   delete lightingShader;
+                   lightingShader = new Shader(
+                       "./src/02_Lighting/02_Basic/vertex.vs",
+                       "./src/02_Lighting/02_Basic/frag_lighting.fs");
+               })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_2, [&]() {
+            delete lightingShader;
+            lightingShader =
+                new Shader("./src/02_Lighting/02_Basic/vertex_g.vs",
+                           "./src/02_Lighting/02_Basic/frag_g.fs");
         });
-
+    cout << "press [1] to use Phong shading\npress [2] to use Gouraud shading";
     glEnable(GL_DEPTH_TEST);
     // loop
     OpQueue opList;
