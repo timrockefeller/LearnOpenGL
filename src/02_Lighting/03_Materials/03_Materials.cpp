@@ -75,8 +75,16 @@ int main(int argc, char const* argv[]) {
     Shader* lightingShader =
         new Shader("./src/02_Lighting/03_Materials/vertex.vs",
                    "./src/02_Lighting/03_Materials/frag_lighting.fs");
-    Shader* lampShader = new Shader("./src/02_Lighting/03_Materials/vertex.vs",
-                                    "./src/02_Lighting/03_Materials/frag_lamp.fs");
+    Shader* lampShader =
+        new Shader("./src/02_Lighting/03_Materials/vertex.vs",
+                   "./src/02_Lighting/03_Materials/frag_lamp.fs");
+    lightingShader->setVec3f("material.ambient", 1.0f, 0.5f, 0.31f);
+    lightingShader->setVec3f("material.diffuse", 1.0f, 0.5f, 0.31f);
+    lightingShader->setVec3f("material.specular", 0.5f, 0.5f, 0.5f);
+    lightingShader->setFloat("material.shininess", 32.0f);
+    lightingShader->setVec3f("light.ambient", 0.2f, 0.2f, 0.2f);
+    lightingShader->setVec3f("light.diffuse", 0.5f, 0.5f, 0.5f);
+    lightingShader->setVec3f("light.specular", 1.0f, 1.0f, 1.0f);
 
     glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
@@ -92,16 +100,14 @@ int main(int argc, char const* argv[]) {
                    if (r)
                        camera.ProcessMouseScroll(*r);
                })
-        ->bind(
-            EventListener::Event_Type::MOUSE_MOVE,
-            [&]() {
-                float *xoffset =
-                          GStorage<float>::getInstance()->getPtr(strMousePosX),
-                      *yoffset =
-                          GStorage<float>::getInstance()->getPtr(strMousePosY);
-                if (xoffset && yoffset)
-                    camera.ProcessMouseMovement(*xoffset, *yoffset);
-            });
+        ->bind(EventListener::Event_Type::MOUSE_MOVE, [&]() {
+            float *xoffset =
+                      GStorage<float>::getInstance()->getPtr(strMousePosX),
+                  *yoffset =
+                      GStorage<float>::getInstance()->getPtr(strMousePosY);
+            if (xoffset && yoffset)
+                camera.ProcessMouseMovement(*xoffset, *yoffset);
+        });
     glEnable(GL_DEPTH_TEST);
     // loop
     OpQueue opList;
@@ -122,9 +128,8 @@ int main(int argc, char const* argv[]) {
             lightingShader->setMat4f("view", view);
             lightingShader->setMat4f("model", model);
 
-            lightingShader->setVec3f("objectColor", 1.0f, 0.5f, 0.31f);
-            lightingShader->setVec3f("lightColor", 1.0f, 1.0f, 1.0f);
-            lightingShader->setVec3f("lightPos", lightPos);
+            //lightingShader->setVec3f("objectColor", 1.0f, 0.5f, 0.31f);
+            lightingShader->setVec3f("light.position", lightPos);
             lightingShader->setVec3f("viewPos", camera.GetPosition());
 
             glBindVertexArray(cubeVAO);
