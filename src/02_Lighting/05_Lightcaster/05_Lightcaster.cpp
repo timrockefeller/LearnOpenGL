@@ -100,19 +100,32 @@ int main(int argc, char const* argv[]) {
     Shader *directShader = new Shader(
                "./src/02_Lighting/05_Lightcaster/vertex.vs",
                "./src/02_Lighting/05_Lightcaster/frag_lighting_direct.fs"),
+           *pointShader = new Shader(
+               "./src/02_Lighting/05_Lightcaster/vertex.vs",
+               "./src/02_Lighting/05_Lightcaster/frag_lighting_point.fs"),
+           *currentShader,
            *lampShader =
                new Shader("./src/02_Lighting/05_Lightcaster/vertex.vs",
                           "./src/02_Lighting/05_Lightcaster/frag_lamp.fs");
-    directShader->setInt("material.diffuse", 0);
-    directShader->setInt("material.specular", 1);
-    directShader->setFloat("material.shininess", 0.4f * 128);
-    directShader->setVec3f("light.ambient", 0.2f, 0.2f, 0.2f);
-    directShader->setVec3f("light.diffuse", 0.5f, 0.5f, 0.5f);
-    directShader->setVec3f("light.specular", 1.0f, 1.0f, 1.0f);
 
+    directShader->setVec3f("light.direction", -0.2f, -1.0f, -0.3f);
+
+    pointShader->setFloat("light.constant", 1.0f);
+    pointShader->setFloat("light.linear", 0.09f);
+    pointShader->setFloat("light.quadratic", 0.032f);
     glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+    pointShader->setVec3f("light.position", lightPos);
 
     Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+
+    auto initShader = [&]() {
+        currentShader->setVec3f("light.ambient", 0.2f, 0.2f, 0.2f);
+        currentShader->setVec3f("light.diffuse", 0.5f, 0.5f, 0.5f);
+        currentShader->setVec3f("light.specular", 1.0f, 1.0f, 1.0f);
+        currentShader->setInt("material.diffuse", 0);
+        currentShader->setInt("material.specular", 1);
+        currentShader->setFloat("material.shininess", 0.4f * 128);
+    };
 
     // event
     EventListener::getInstance()
@@ -123,15 +136,30 @@ int main(int argc, char const* argv[]) {
                    if (r)
                        camera.ProcessMouseScroll(*r);
                })
-        ->bind(EventListener::Event_Type::MOUSE_MOVE, [&]() {
-            float *xoffset =
-                      GStorage<float>::getInstance()->getPtr(strMousePosX),
-                  *yoffset =
-                      GStorage<float>::getInstance()->getPtr(strMousePosY);
-            if (xoffset && yoffset)
-                camera.ProcessMouseMovement(*xoffset, *yoffset);
+        ->bind(
+            EventListener::Event_Type::MOUSE_MOVE,
+            [&]() {
+                float *xoffset =
+                          GStorage<float>::getInstance()->getPtr(strMousePosX),
+                      *yoffset =
+                          GStorage<float>::getInstance()->getPtr(strMousePosY);
+                if (xoffset && yoffset)
+                    camera.ProcessMouseMovement(*xoffset, *yoffset);
+            })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_1,
+               [&]() {
+                   currentShader = directShader;
+                   initShader();
+               })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_2, [&]() {
+            currentShader = pointShader;
+            initShader();
         });
     glEnable(GL_DEPTH_TEST);
+
+    currentShader = directShader;
+    initShader();
+
     // loop
     OpQueue opList;
     opList << [&]() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
@@ -153,13 +181,13 @@ int main(int argc, char const* argv[]) {
             // glm::vec3 ambientColor =
             //     diffuseColor * glm::vec3(.2f);  // 很低的影响
 
-            directShader->Use();
-            directShader->setMat4f("projection", projection);
-            directShader->setMat4f("view", view);
+            currentShader->Use();
+            currentShader->setMat4f("projection", projection);
+            currentShader->setMat4f("view", view);
             // directShader->setVec3f("light.ambient", ambientColor);
             // directShader->setVec3f("light.diffuse", diffuseColor);
-            directShader->setVec3f("light.direction", -0.2f, -1.0f, -0.3f);
-            directShader->setVec3f("viewPos", camera.GetPosition());
+
+            currentShader->setVec3f("viewPos", camera.GetPosition());
             glBindVertexArray(cubeVAO);
             tex_deffuse.setUnit(0);
             tex_specular.setUnit(1);
@@ -168,7 +196,7 @@ int main(int argc, char const* argv[]) {
                 float angle = 20.0f * i;
                 model = glm::rotate(model, glm::radians(angle),
                                     glm::vec3(1.0f, 0.3f, 0.5f));
-                directShader->setMat4f("model", model);
+                currentShader->setMat4f("model", model);
                 glDrawArrays(GL_TRIANGLES, 0, 36);
             }
 
