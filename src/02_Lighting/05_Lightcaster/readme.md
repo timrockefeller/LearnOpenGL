@@ -47,3 +47,12 @@ $$
 
 ![img](https://learnopengl-cn.github.io/img/02/05/attenuation.png)
 
+## 聚光
+
+![img](https://learnopengl-cn.github.io/img/02/05/light_casters_spotlight_angles.png)
+
+- `LightDir`：从片段指向光源的向量。
+- `SpotDir`：聚光所指向的方向。
+- `Phi`ϕ：指定了聚光半径的切光角。落在这个角度之外的物体都不会被这个聚光所照亮。
+- `Theta`θ：LightDir向量和SpotDir向量之间的夹角。在聚光内部的话θ值应该比ϕ值小。
+

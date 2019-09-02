@@ -103,6 +103,9 @@ int main(int argc, char const* argv[]) {
            *pointShader = new Shader(
                "./src/02_Lighting/05_Lightcaster/vertex.vs",
                "./src/02_Lighting/05_Lightcaster/frag_lighting_point.fs"),
+           *spotShader = new Shader(
+               "./src/02_Lighting/05_Lightcaster/vertex.vs",
+               "./src/02_Lighting/05_Lightcaster/frag_lighting_spot.fs"),
            *currentShader,
            *lampShader =
                new Shader("./src/02_Lighting/05_Lightcaster/vertex.vs",
@@ -151,10 +154,26 @@ int main(int argc, char const* argv[]) {
                    currentShader = directShader;
                    initShader();
                })
-        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_2, [&]() {
-            currentShader = pointShader;
-            initShader();
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_2,
+               [&]() {
+                   currentShader = pointShader;
+                   initShader();
+               })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_3,
+               [&]() {
+                   currentShader = spotShader;
+                   initShader();
+               })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_H, []() {
+            cout << "[Guide] Press follow buttons to use a specific shader:"
+                 << endl;
+            cout << "\t[1] Direct Light" << endl;
+            cout << "\t[2] Point Light" << endl;
+            cout << "\t[3] Spot Light" << endl;
         });
+
+    cout << "Press [H] to read guide." << endl;
+
     glEnable(GL_DEPTH_TEST);
 
     currentShader = directShader;
