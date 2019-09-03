@@ -56,3 +56,11 @@ $$
 - `Phi`ϕ：指定了聚光半径的切光角。落在这个角度之外的物体都不会被这个聚光所照亮。
 - `Theta`θ：LightDir向量和SpotDir向量之间的夹角。在聚光内部的话θ值应该比ϕ值小。
 
+### 边缘模糊
+
+$$
+\begin{equation} I = \frac{\theta - \gamma}{\epsilon} \end{equation}
+$$
+
+这里ϵ(Epsilon)是内（ϕ）和外圆锥（γ）之间的余弦值差（ϵ=ϕ−γ）。最终的II值就是在当前片段聚光的强度。
+

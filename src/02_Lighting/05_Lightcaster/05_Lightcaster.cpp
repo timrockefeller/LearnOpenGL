@@ -121,6 +121,11 @@ int main(int argc, char const* argv[]) {
 
     Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
+    spotShader->setVec3f("light.position", camera.GetPosition());
+    spotShader->setVec3f("light.direction", camera.GetFront());
+    spotShader->setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+    spotShader->setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+
     auto initShader = [&]() {
         currentShader->setVec3f("light.ambient", 0.2f, 0.2f, 0.2f);
         currentShader->setVec3f("light.diffuse", 0.5f, 0.5f, 0.5f);
@@ -205,6 +210,11 @@ int main(int argc, char const* argv[]) {
             currentShader->setMat4f("view", view);
             // directShader->setVec3f("light.ambient", ambientColor);
             // directShader->setVec3f("light.diffuse", diffuseColor);
+
+            {  // for spot light update
+                spotShader->setVec3f("light.position", camera.GetPosition());
+                spotShader->setVec3f("light.direction", camera.GetFront());
+            }
 
             currentShader->setVec3f("viewPos", camera.GetPosition());
             glBindVertexArray(cubeVAO);

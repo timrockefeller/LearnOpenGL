@@ -87,6 +87,9 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
 glm::vec3 Camera::GetPosition() const {
     return Position;
 }
+glm::vec3 Camera::GetFront() const {
+    return Front;
+}
 
 void Camera::ProcessMouseMovement(float xoffset,
                                   float yoffset,
