@@ -141,11 +141,15 @@ int main(int argc, char const* argv[]) {
 
     Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
-    // spotShader->setVec3f("light.position", camera.GetPosition());
-    // spotShader->setVec3f("light.direction", camera.GetFront());
-    // spotShader->setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-    // spotShader->setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
-
+    lightingShader->setVec3f("spotLight.position", camera.GetPosition());
+    lightingShader->setVec3f("spotLight.direction", camera.GetFront());
+    lightingShader->setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+    lightingShader->setFloat("spotLight.outerCutOff",
+                             glm::cos(glm::radians(17.5f)));
+    lightingShader->setVec3f("spotLight.ambient", 0.2f, 0.2f, 0.2f);
+    lightingShader->setVec3f("spotLight.diffuse", 0.5f, 0.5f, 0.5f);
+    lightingShader->setVec3f("spotLight.specular", 1.0f, 1.0f, 1.0f);
+    
     // event
     EventListener::getInstance()
         ->bind(EventListener::Event_Type::MOUSE_SCROLL,
@@ -193,10 +197,10 @@ int main(int argc, char const* argv[]) {
             // directShader->setVec3f("light.ambient", ambientColor);
             // directShader->setVec3f("light.diffuse", diffuseColor);
 
-            // {  // for spot light update
-            //     spotShader->setVec3f("light.position", camera.GetPosition());
-            //     spotShader->setVec3f("light.direction", camera.GetFront());
-            // }
+            {  // for spot light update
+                lightingShader->setVec3f("spotLight.position", camera.GetPosition());
+                lightingShader->setVec3f("spotLight.direction", camera.GetFront());
+            }
 
             lightingShader->setVec3f("viewPos", camera.GetPosition());
             glBindVertexArray(cubeVAO);
