@@ -14,7 +14,6 @@ void Mesh::Draw(Shader shader) {
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
     for (unsigned int i = 0; i < textures.size(); i++) {
-        glActiveTexture(GL_TEXTURE0 + i);  // 在绑定之前激活相应的纹理单元
         // 获取纹理序号（diffuse_textureN 中的 N）
         string number;
         string name = textures[i].type;
@@ -25,7 +24,7 @@ void Mesh::Draw(Shader shader) {
 
         // custom by user
         shader.setFloat(("material." + name + number).c_str(), i);
-        glBindTexture(GL_TEXTURE_2D, textures[i].ID);
+        textures[i].setUnit(i);
     }
     glActiveTexture(GL_TEXTURE0);
 

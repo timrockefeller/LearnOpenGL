@@ -109,10 +109,8 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
     {
         aiString str;
         mat->GetTexture(type, i, &str);
-        Texture texture;
-        texture.ID = TextureFromFile(str.C_Str(), directory);
+        Texture texture(str.C_Str());
         texture.type = typeName;
-        texture.path = str;
         textures.push_back(texture);
     }
     return textures;

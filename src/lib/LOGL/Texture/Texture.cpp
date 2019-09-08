@@ -17,10 +17,6 @@ GLuint Texture::GetID() const {
     return ID;
 }
 
-string Texture::GetPath() const {
-    return path;
-}
-
 bool Texture::Load(const std::string& path, bool flip, bool gammaCorrection) {
     if (IsValid()) {
         cout << "ERROR: The texture is valid already." << endl;

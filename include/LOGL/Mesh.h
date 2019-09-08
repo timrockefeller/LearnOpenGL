@@ -1,5 +1,6 @@
 #pragma once
 #include <LOGL/Shader.h>
+#include <LOGL/Texture.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -11,10 +12,6 @@ struct Vertex {
     glm::vec3 Position;
     glm::vec3 Normal;
     glm::vec2 TexCoords;
-};
-struct Texture {
-    unsigned int ID;
-    std::string type;
 };
 
 class Mesh {
