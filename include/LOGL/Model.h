@@ -23,5 +23,6 @@ class Model {
     std::vector<Texture> loadMaterialTextures(aiMaterial* mat,
                                               aiTextureType type,
                                               std::string typeName);
+    std::vector<Texture> textures_loaded;
 };
 }  // namespace LOGL
