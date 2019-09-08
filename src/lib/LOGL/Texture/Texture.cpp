@@ -5,7 +5,7 @@
 using namespace LOGL;
 using namespace KTKR;
 using namespace std;
-Texture::Texture(const std::string& path, bool flip):ID(0) {
+Texture::Texture(const std::string& path, bool flip) : ID(0), path(path) {
     Load(path, flip);
 }
 
@@ -15,6 +15,10 @@ bool Texture::IsValid() const {
 
 GLuint Texture::GetID() const {
     return ID;
+}
+
+string Texture::GetPath() const {
+    return path;
 }
 
 bool Texture::Load(const std::string& path, bool flip, bool gammaCorrection) {

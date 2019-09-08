@@ -17,8 +17,11 @@ class Texture {
     );
     bool setUnit(GLuint unit = 0) const;
     GLuint GetID() const;
+    std::string GetPath() const;
+
    private:
     GLuint ID;
+    std::string path;
 };
 
 }  // namespace LOGL
