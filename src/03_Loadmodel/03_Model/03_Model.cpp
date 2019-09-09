@@ -1,9 +1,9 @@
 #include <LOGL/Camera.h>
 #include <LOGL/Common.h>
 #include <LOGL/Glfw.h>
+#include <LOGL/Model.h>
 #include <LOGL/Shader.h>
 #include <LOGL/Texture.h>
-#include <LOGL/Model.h>
 #include <Util/EventListener.h>
 #include <Util/GStorage.h>
 #include <iostream>
@@ -22,6 +22,8 @@ int main(int argc, char const* argv[]) {
     Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
     Model rmodel("assets/models/nanosuit/nanosuit.obj");
+
+    glm::vec3 lightPos = glm::vec3(3.0f, 2.0f, 3.0f);
 
     // event
     EventListener::getInstance()
@@ -69,8 +71,11 @@ int main(int argc, char const* argv[]) {
                                                // scene, so scale it down
             shader->setMat4f("model", model);
 
+            shader->setVec3f("viewPos", camera.GetPosition());
+            shader->setVec3f("lightPos", lightPos);
             rmodel.Draw(*shader);
-
+            shader->setMat4f("model", glm::translate(glm::mat4(1),lightPos));
+            rmodel.Draw(*shader);
         } << Glfw::getInstance()->_endOp;
     Glfw::getInstance()->Run(&opList);
 
