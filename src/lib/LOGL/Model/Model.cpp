@@ -119,7 +119,7 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial* mat,
             }
         }
         if (!skip) {
-            Texture texture(str.C_Str());
+            Texture texture(directory + "/" + str.C_Str());
             texture.type = typeName;
             textures.push_back(texture);
             textures_loaded.push_back(texture);
