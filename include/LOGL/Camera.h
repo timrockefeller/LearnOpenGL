@@ -37,6 +37,7 @@ class Camera {
 
     glm::vec3 GetPosition() const;
     glm::vec3 GetFront() const;
+    float GetZoom() const;
 
     // Processes input received from any keyboard-like input system. Accepts
     // input parameter in the form of camera defined ENUM (to abstract it from

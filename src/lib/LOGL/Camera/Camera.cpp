@@ -90,6 +90,9 @@ glm::vec3 Camera::GetPosition() const {
 glm::vec3 Camera::GetFront() const {
     return Front;
 }
+float Camera::GetZoom() const {
+    return Zoom;
+}
 
 void Camera::ProcessMouseMovement(float xoffset,
                                   float yoffset,
