@@ -18,10 +18,10 @@ class Shader {
     void setVec3f(const std::string& name, glm::vec3 vec);
     void setMat4f(const std::string& name, const float* matValue) const;
     void setMat4f(const std::string& name, glm::mat4 mat4) const;
-    GLuint GetID() const;
+    unsigned int GetID() const;
     bool isValid() const;
 
    private:
-    GLuint ID;
+    unsigned int ID;
 };
 }  // namespace LOGL

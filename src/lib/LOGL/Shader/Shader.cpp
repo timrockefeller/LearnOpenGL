@@ -62,7 +62,7 @@ Shader::Shader(const string& vertexShaderPath,
     glDeleteShader(fragmentShader);
 }
 
-GLuint Shader::GetID() const {
+unsigned int Shader::GetID() const {
     return ID;
 }
 
