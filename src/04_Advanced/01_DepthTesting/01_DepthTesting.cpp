@@ -87,7 +87,7 @@ int main(int argc, char const* argv[]) {
     floorTexture.setUnit(1);
 
     Shader shader("./src/04_Advanced/01_DepthTesting/vertex.vs",
-                  "./src/04_Advanced/01_DepthTesting/frag_diff.fs");
+                  "./src/04_Advanced/01_DepthTesting/frag_depth.fs");
 
     Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
@@ -108,8 +108,12 @@ int main(int argc, char const* argv[]) {
             if (xoffset && yoffset)
                 camera.ProcessMouseMovement(*xoffset, *yoffset);
         });
-    //
+
+    ///////////////
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    ///////////////
+
     OpQueue op;
     op << Glfw::getInstance()->_startOp << [&]() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
