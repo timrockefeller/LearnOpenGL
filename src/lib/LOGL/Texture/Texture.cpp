@@ -71,6 +71,7 @@ bool Texture::Load(const std::string& path, bool flip, bool gammaCorrection) {
     );
     glGenerateMipmap(GL_TEXTURE_2D);
     img.Free();
+    return true;
 }
 
 bool Texture::setUnit(GLuint unit) const {

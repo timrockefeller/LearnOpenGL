@@ -190,6 +190,7 @@ int main(int argc, char const* argv[]) {
 
         // grass
         glEnable(GL_ALPHA);
+        
         glBindVertexArray(grassVAO);
         grassShader.setInt("texture1", 2);
         for (int i = 0; i < vegetation.size(); i++) {
