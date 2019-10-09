@@ -52,6 +52,11 @@ bool Texture::Load(const std::string& path, bool flip, bool gammaCorrection) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
                     GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // 对于含有alpha通道的图像，为了防止出现边缘问题，使用以下方案：
+    if (nrComponents == 4) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    }
 
     glTexImage2D(          // 绑定纹理信息
         GL_TEXTURE_2D,     // 纹理目标
