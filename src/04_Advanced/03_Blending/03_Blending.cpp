@@ -116,7 +116,7 @@ int main(int argc, char const* argv[]) {
 
     Texture cubeTexture("./assets/textures/marble.jpg"),
         floorTexture("./assets/textures/metal.png"),
-        grassTexture("./assets/textures/grass.png");
+        grassTexture("./assets/textures/blending_transparent_window.png");
 
     cubeTexture.setUnit(0);
     floorTexture.setUnit(1);
@@ -150,6 +150,8 @@ int main(int argc, char const* argv[]) {
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     OpQueue op;
     op << Glfw::getInstance()->_startOp << [&]() {
@@ -190,7 +192,7 @@ int main(int argc, char const* argv[]) {
 
         // grass
         glEnable(GL_ALPHA);
-        
+
         glBindVertexArray(grassVAO);
         grassShader.setInt("texture1", 2);
         for (int i = 0; i < vegetation.size(); i++) {
