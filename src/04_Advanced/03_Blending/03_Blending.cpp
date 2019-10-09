@@ -192,11 +192,15 @@ int main(int argc, char const* argv[]) {
 
         // grass
         glEnable(GL_ALPHA);
-
         glBindVertexArray(grassVAO);
         grassShader.setInt("texture1", 2);
-        for (int i = 0; i < vegetation.size(); i++) {
-            model = glm::translate(glm::mat4(1), vegetation[i]);
+        std::map<float, glm::vec3> sorted;
+        for (unsigned int i = 0; i < vegetation.size(); i++) {
+            float distance = glm::length(camera.GetPosition() - vegetation[i]);
+            sorted[distance] = vegetation[i];
+        }
+        for(std::map<float,glm::vec3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it)  {
+            model = glm::translate(glm::mat4(1), it->second);
             grassShader.setMat4f("model", model);
             glDrawArrays(GL_TRIANGLES, 0, 6);
         }
