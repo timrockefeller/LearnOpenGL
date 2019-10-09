@@ -17,7 +17,7 @@ int main(int argc, char const* argv[]) {
     Glfw::getInstance()->Init(DEFAULT_WIDTH, DEFAULT_HEIGHT, title);
 
     Shader* shader = new Shader("src/03_Loadmodel/03_Model/vertex.vs",
-                                "src/03_Loadmodel/03_Model/frag_model.fs");
+                                "src/03_Loadmodel/03_Model/frag_normal.fs");
 
     Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
