@@ -10,7 +10,9 @@ uniform vec3 viewPos;
 
 void main()
 {   
-    float border = dot(normalize(FragPos-viewPos),normalize(Normal));
-        FragColor = vec4(1-border,1-border,1-border,1.0);
-        FragColor = vec4(1-border,1-border,1-border,1.0);
+    // float border = dot(normalize(FragPos-viewPos),normalize(Normal));
+    //     FragColor = vec4(1-border,1-border,1-border,1.0);
+    //     FragColor = vec4(1-border,1-border,1-border,1.0);
+    // FragColor = vec4(normalize(Normal-normalize(FragPos-viewPos)),1.0f);
+    FragColor = vec4(Normal,1.0f);
 }
