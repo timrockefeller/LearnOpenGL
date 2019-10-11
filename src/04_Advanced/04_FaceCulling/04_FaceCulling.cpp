@@ -12,7 +12,7 @@ using namespace std;
 
 void processCameraInput(GLFWwindow* window, Camera* camera, float deltaTime);
 int main(int argc, char const* argv[]) {
-    const string title = "04_04 Face Cutting";
+    const string title = "04_04 Face Culling";
     Glfw::getInstance()->Init(DEFAULT_WIDTH, DEFAULT_HEIGHT, title);
 
     float cubeVertices[] = {
@@ -86,8 +86,8 @@ int main(int argc, char const* argv[]) {
     cubeTexture.setUnit(0);
     floorTexture.setUnit(1);
 
-    Shader shader("./src/04_Advanced/04_FaceCutting/vertex.vs",
-                  "./src/04_Advanced/04_FaceCutting/frag_color.fs");
+    Shader shader("./src/04_Advanced/04_FaceCulling/vertex.vs",
+                  "./src/04_Advanced/04_FaceCulling/frag_color.fs");
 
     Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
@@ -111,6 +111,11 @@ int main(int argc, char const* argv[]) {
 
     glEnable(GL_DEPTH_TEST);
 
+    ////////
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+    glFrontFace(GL_CW);
+    ////////
 
     OpQueue op;
     op << Glfw::getInstance()->_startOp << [&]() {
