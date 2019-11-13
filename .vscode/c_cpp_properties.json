@@ -14,9 +14,7 @@
             "includePath": [
                 "include",
                 "lib"
-            ],
-            "cppStandard": "c++17",
-            "configurationProvider": "vector-of-bool.cmake-tools"
+            ]
         }
     ],
     "version": 4

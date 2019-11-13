@@ -2,7 +2,7 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "g++.exe build active file",
+            "label": "g++.exe build active file233333",
             "command": "g++.exe",
             "args": [
                 "-g",
