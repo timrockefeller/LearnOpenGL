@@ -9,6 +9,17 @@ Texture::Texture(const std::string& path, bool flip) : ID(0), path(path) {
     Load(path, flip);
 }
 
+Texture::Texture(size_t width, size_t height) {
+    glGenTextures(1, &ID);
+    glBindTexture(GL_TEXTURE_2D, ID);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
+                 GL_UNSIGNED_BYTE, NULL);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
 bool Texture::IsValid() const {
     return ID != 0;
 }

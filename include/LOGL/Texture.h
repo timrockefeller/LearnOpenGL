@@ -7,6 +7,8 @@ class Texture {
    public:
     Texture(const std::string& path, bool flip = false);
 
+    Texture(size_t width, size_t height);
+
     //~Texture();
 
     bool IsValid() const;

@@ -14,6 +14,6 @@ set(STR_TARGET_SOURCES "")
 foreach(SOURCE ${ALL_SOURCES})
 	set(STR_TARGET_SOURCES "${STR_TARGET_SOURCES} ${SOURCE}")
 endforeach(SOURCE ${ALL_SOURCES})
-set(STR_TARGET_LIBS "glfw3.lib glad Operation EventListener Glfw File Shader Image Texture Camera opengl32.lib")
+set(STR_TARGET_LIBS "glfw3.lib glad Operation EventListener Glfw File Shader Image Texture Camera FBO VAO opengl32.lib")
 
 SETUP_PROJECT(${MODE} ${TARGET_NAME} ${STR_TARGET_SOURCES} ${STR_TARGET_LIBS})

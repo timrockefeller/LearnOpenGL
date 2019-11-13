@@ -1,8 +1,10 @@
 #include <LOGL/Camera.h>
 #include <LOGL/Common.h>
+#include <LOGL/FBO.h>
 #include <LOGL/Glfw.h>
 #include <LOGL/Shader.h>
 #include <LOGL/Texture.h>
+#include <LOGL/VAO.h>
 #include <Util/EventListener.h>
 #include <Util/GStorage.h>
 #include <Util/OpQueue.h>
@@ -15,11 +17,7 @@ int main(int argc, char const* argv[]) {
     const string title = "04_05 Frame Buffer";
     Glfw::getInstance()->Init(DEFAULT_WIDTH, DEFAULT_HEIGHT, title);
 
-    
-
-
     float cubeVertices[] = {
-        // positions          // texture Coords
         -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f,  -0.5f, -0.5f, 1.0f, 0.0f,
         0.5f,  0.5f,  -0.5f, 1.0f, 1.0f, 0.5f,  0.5f,  -0.5f, 1.0f, 1.0f,
         -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f, -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
@@ -44,14 +42,21 @@ int main(int argc, char const* argv[]) {
         0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
         -0.5f, 0.5f,  0.5f,  0.0f, 0.0f, -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f};
     float planeVertices[] = {
-        // positions          // texture Coords (note we set these higher than 1
-        // (together with GL_REPEAT as texture wrapping mode). this will cause
-        // the floor texture to repeat)
         5.0f, -0.5f, 5.0f,  2.0f,  0.0f,  -5.0f, -0.5f, 5.0f,
         0.0f, 0.0f,  -5.0f, -0.5f, -5.0f, 0.0f,  2.0f,
 
         5.0f, -0.5f, 5.0f,  2.0f,  0.0f,  -5.0f, -0.5f, -5.0f,
         0.0f, 2.0f,  5.0f,  -0.5f, -5.0f, 2.0f,  2.0f};
+    float quadVertices[] = {-1.0f, 1.0f, 0.0f, 1.0f,  -1.0f, -1.0f,
+                            0.0f,  0.0f, 1.0f, -1.0f, 1.0f,  0.0f,
+
+                            -1.0f, 1.0f, 0.0f, 1.0f,  1.0f,  -1.0f,
+                            1.0f,  0.0f, 1.0f, 1.0f,  1.0f,  1.0f};
+    vector<unsigned int> quadAttr = {2, 2};
+
+    FBO fbor(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    fbor.Use();  // 在绑定到GL_FRAMEBUFFER目标之后，所有的读取和写入帧缓冲的操作将会影响当前绑定的帧缓冲。
+
     // cube VAO
     unsigned int cubeVAO, cubeVBO;
     glGenVertexArrays(1, &cubeVAO);
@@ -83,15 +88,38 @@ int main(int argc, char const* argv[]) {
                           (void*)(3 * sizeof(float)));
     glBindVertexArray(0);
 
+    // screen quad VAO
+    // unsigned int quadVAO, quadVBO;
+    // glGenVertexArrays(1, &quadVAO);
+    // glGenBuffers(1, &quadVBO);
+    // glBindVertexArray(quadVAO);
+    // glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices,
+    //              GL_STATIC_DRAW);
+    // glEnableVertexAttribArray(0);
+    // glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
+    //                       (void*)0);
+    // glEnableVertexAttribArray(1);
+    // glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
+    //                       (void*)(2 * sizeof(float)));
+    // glBindVertexArray(0);
+    VAO quadVAO(quadVertices, sizeof(quadVertices), quadAttr);
+
     Texture cubeTexture("./assets/textures/marble.jpg"),
         floorTexture("./assets/textures/metal.png");
 
     cubeTexture.setUnit(0);
     floorTexture.setUnit(1);
 
-    Shader shader("./src/04_Advanced/05_FrameBuffer/vertex.vs",
-                  "./src/04_Advanced/05_FrameBuffer/frag_color.fs");
+    fbor.GetTexture()->setUnit(2);
 
+    Shader shader("./src/04_Advanced/05_FrameBuffer/vertex.vs",
+                  "./src/04_Advanced/05_FrameBuffer/frag_color.fs"),
+        screenshader("./src/04_Advanced/05_FrameBuffer/vertex_fb.vs",
+                     "./src/04_Advanced/05_FrameBuffer/frag_fb.fs");
+    shader.setInt("texture1", 0);
+    screenshader.setInt("screenTexture", 2);
+    screenshader.setInt("ctrl", 0);
     Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
     // event
@@ -103,23 +131,38 @@ int main(int argc, char const* argv[]) {
                    if (r)
                        camera.ProcessMouseScroll(*r);
                })
-        ->bind(EventListener::Event_Type::MOUSE_MOVE, [&]() {
-            float *xoffset =
-                      GStorage<float>::getInstance()->getPtr(strMousePosX),
-                  *yoffset =
-                      GStorage<float>::getInstance()->getPtr(strMousePosY);
-            if (xoffset && yoffset)
-                camera.ProcessMouseMovement(*xoffset, *yoffset);
-        });
-
-    glEnable(GL_DEPTH_TEST);
+        ->bind(
+            EventListener::Event_Type::MOUSE_MOVE,
+            [&]() {
+                float *xoffset =
+                          GStorage<float>::getInstance()->getPtr(strMousePosX),
+                      *yoffset =
+                          GStorage<float>::getInstance()->getPtr(strMousePosY);
+                if (xoffset && yoffset)
+                    camera.ProcessMouseMovement(*xoffset, *yoffset);
+            })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_0,
+               [&]() { screenshader.setInt("ctrl", 0); })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_1,
+               [&]() { screenshader.setInt("ctrl", 1); })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_2,
+               [&]() { screenshader.setInt("ctrl", 2); })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_3,
+               [&]() { screenshader.setInt("ctrl", 3); });
 
     OpQueue op;
-    op << Glfw::getInstance()->_startOp << [&]() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    op << Glfw::getInstance()->_startOp << [&]() {  // draw default scene
         processCameraInput(Glfw::getInstance()->getWindow(), &camera,
                            Glfw::getInstance()->deltaTime);
+
+        /**
+         *  render fbo scene
+         *
+         */
+        fbor.Use();
+        glEnable(GL_DEPTH_TEST);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         shader.Use();
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = camera.GetViewMatrix();
@@ -144,9 +187,28 @@ int main(int argc, char const* argv[]) {
         shader.setMat4f("model", glm::mat4(1.0f));
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
+    } << [&]() {
+        /**
+         *  render quad scene
+         *
+         */
+        FBO::UseDefault(            );
+        glDisable(GL_DEPTH_TEST);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        screenshader.Use();
+        quadVAO.Use();
+        fbor.GetTexture()->setUnit(2);
+        quadVAO.Draw();
     } << Glfw::getInstance()->_endOp;
 
     Glfw::getInstance()->Run(&op);
+
+    glDeleteVertexArrays(1, &planeVAO);
+    glDeleteVertexArrays(1, &cubeVAO);
+    glDeleteBuffers(1, &cubeVBO);
+    glDeleteBuffers(1, &planeVBO);
 
     return 0;
 }
