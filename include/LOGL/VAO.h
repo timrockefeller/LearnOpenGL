@@ -9,7 +9,7 @@ class VAO {
     //     unsigned int attrLen;
     // };
     VAO(unsigned int ID,unsigned int num):ID(ID),isValid(true),pointNum(num){}
-    VAO(float const* data, size_t dataSize, const std::vector<unsigned int>& attrLen);
+    VAO(float const * data, size_t dataSize, const std::vector<unsigned int>& attrLen);
     // VAO(float const* data,
     //     unsigned int dataSize,
     //     const std::vector<unsigned int>& attrLen,
