@@ -8,7 +8,6 @@
 #include <Util/EventListener.h>
 #include <Util/GStorage.h>
 #include <Util/OpQueue.h>
-#include "CommonDefine.h"
 using namespace LOGL;
 using namespace KTKR;
 using namespace std;
@@ -48,61 +47,23 @@ int main(int argc, char const* argv[]) {
 
         5.0f, -0.5f, 5.0f,  2.0f,  0.0f,  -5.0f, -0.5f, -5.0f,
         0.0f, 2.0f,  5.0f,  -0.5f, -5.0f, 2.0f,  2.0f};
+    float quadVertices[] = {-1.0f, 1.0f, 0.0f, 1.0f,  -1.0f, -1.0f,
+                            0.0f,  0.0f, 1.0f, -1.0f, 1.0f,  0.0f,
+
+                            -1.0f, 1.0f, 0.0f, 1.0f,  1.0f,  -1.0f,
+                            1.0f,  0.0f, 1.0f, 1.0f,  1.0f,  1.0f};
 
     FBO fbor(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     fbor.Use();  // 在绑定到GL_FRAMEBUFFER目标之后，所有的读取和写入帧缓冲的操作将会影响当前绑定的帧缓冲。
 
     // cube VAO
-    unsigned int cubeVAO, cubeVBO;
-    glGenVertexArrays(1, &cubeVAO);
-    glGenBuffers(1, &cubeVBO);
-    glBindVertexArray(cubeVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices,
-                 GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          (void*)0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          (void*)(3 * sizeof(float)));
-    glBindVertexArray(0);
-    // unsigned int cubeVAO = VAO(&(cubeVertices[0]), sizeof(cubeVertices), {3,
-    // 2}).GetID();
+    VAO cubeVAO(&(cubeVertices[0]), sizeof(cubeVertices), {3, 2});
 
     // plane VAO
-    unsigned int planeVAO, planeVBO;
-    glGenVertexArrays(1, &planeVAO);
-    glGenBuffers(1, &planeVBO);
-    glBindVertexArray(planeVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices,
-                 GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          (void*)0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          (void*)(3 * sizeof(float)));
-    glBindVertexArray(0);
+    VAO planeVAO(planeVertices, sizeof(planeVertices), {3, 2});
 
     // screen quad VAO
-    // unsigned int quadVAO, quadVBO;
-    // glGenVertexArrays(1, &quadVAO);
-    // glGenBuffers(1, &quadVBO);
-    // glBindVertexArray(quadVAO);
-    // glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices,
-    //              GL_STATIC_DRAW);
-    // glEnableVertexAttribArray(0);
-    // glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
-    //                       (void*)0);
-    // glEnableVertexAttribArray(1);
-    // glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
-    //                       (void*)(2 * sizeof(float)));
-    // glBindVertexArray(0);
-    unsigned int quadVAO= VAO(&(quadVertices[0]), sizeof(quadVertices), {2,
-    2}).GetID();
+    VAO quadVAO(&(quadVertices[0]), sizeof(quadVertices), {2, 2});
 
     Texture cubeTexture("./assets/textures/container2.png"),
         floorTexture("./assets/textures/metal.png");
@@ -173,21 +134,18 @@ int main(int argc, char const* argv[]) {
         shader.setMat4f("view", view);
         shader.setMat4f("projection", projection);
         // cubes
-        glBindVertexArray(cubeVAO);
         shader.setInt("texture1", 0);
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
         shader.setMat4f("model", model);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        cubeVAO.Draw();
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
         shader.setMat4f("model", model);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        cubeVAO.Draw();
         // floor
-        glBindVertexArray(planeVAO);
         shader.setInt("texture1", 1);
         shader.setMat4f("model", glm::mat4(1.0f));
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        glBindVertexArray(0);
+        planeVAO.Draw();
         // } << [&]() {
         /**
          *  render quad scene
@@ -200,9 +158,9 @@ int main(int argc, char const* argv[]) {
 
         screenshader.Use();
         fbor.GetTexture()->setUnit(2);
-        // quadVAO.Draw();
-        glBindVertexArray(quadVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        quadVAO.Draw();
+        // glBindVertexArray(quadVAO);
+        // glDrawArrays(GL_TRIANGLES, 0, 6);
     } << Glfw::getInstance()->_endOp;
 
     Glfw::getInstance()->Run(&op);
