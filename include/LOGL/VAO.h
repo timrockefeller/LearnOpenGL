@@ -3,12 +3,12 @@
 namespace LOGL {
 class VAO {
    public:
-    struct VBO_DataPatch {
-        float const* data;
-        unsigned int dataSize;
-        unsigned int attrLen;
-    };
-
+    // struct VBO_DataPatch {
+    //     float const* data;
+    //     unsigned int dataSize;
+    //     unsigned int attrLen;
+    // };
+    VAO(unsigned int ID,unsigned int num):ID(ID),isValid(true),pointNum(num){}
     VAO(float const* data, size_t dataSize, const std::vector<unsigned int>& attrLen);
     // VAO(float const* data,
     //     unsigned int dataSize,
@@ -21,7 +21,7 @@ class VAO {
     //     unsigned int const* index,
     //     unsigned int indexSize,
     //     const std::vector<unsigned int>& divisors = std::vector<unsigned int>());
-    // ~VAO();
+    ~VAO();
 
     unsigned int GetID() const;
     unsigned int GetAttrNum() const;

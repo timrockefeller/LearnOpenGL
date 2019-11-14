@@ -12,6 +12,10 @@ bool Operation::isHold() {
 }
 
 void Operation::Run() {
-    if (op != NULL)
+    if (op == NULL)
+        hold = false;
+    else
         op();
 }
+
+void Operation::operator()() { Run(); }

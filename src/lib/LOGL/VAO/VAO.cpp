@@ -4,12 +4,11 @@
 using namespace std;
 using namespace LOGL;
 
-
 VAO::VAO(float const* data,
          size_t dataSize,
-         const std::vector<unsigned int>& attrLen) {
-    if (data == nullptr || dataSize == 0 || attrLen.size() == 0) {
-        isValid = 0;
+         const vector<unsigned int>& attrLen) {
+    if (data == NULL || dataSize == 0 || attrLen.size() == 0) {
+        isValid = false;
         ID = 0;
         return;
     }
@@ -22,22 +21,23 @@ VAO::VAO(float const* data,
     unsigned int patchLen = 0;
     for (auto& len : attrLen)
         patchLen += len;
-    attrNum = attrLen.size();
-    for (int i = 0, cur = 0; i < attrLen.size(); i++) {
+    for (unsigned int i = 0, cur = 0; i < attrLen.size(); i++) {
         glEnableVertexAttribArray(i);
         glVertexAttribPointer(0, attrLen[i], GL_FLOAT, GL_FALSE,
                               patchLen * sizeof(float),
                               (void*)(cur * sizeof(float)));
         cur += attrLen[i];
     }
+    glBindVertexArray(0);
+    attrNum = attrLen.size();
     pointNum = dataSize / (sizeof(float) * patchLen);
     hasIndex = false;
     isValid = true;
 }
-// VAO::~VAO(){
-//     glDeleteVertexArrays(1, &ID);
-//     glDeleteBuffers(1, &VBO);
-// }
+VAO::~VAO() {
+    // glDeleteVertexArrays(1, &ID);
+    // glDeleteBuffers(1, &VBO);
+}
 unsigned int VAO::GetID() const {
     return ID;
 }
@@ -55,10 +55,9 @@ bool VAO::Use() const {
     return true;
 }
 bool VAO::Draw() const {
-    if (!IsValid()) {
+    if (!Use()) {
         return false;
     }
-    Use();
     glDrawArrays(GL_TRIANGLES, 0, pointNum);
     return true;
 }

@@ -104,13 +104,16 @@ GLFWwindow* Glfw::getWindow() {
     return window;
 }
 
-void Glfw::Run(OpQueue* opList) {
-    while (opList->isHold() && !glfwWindowShouldClose(window)) {
-        opList->Run();
-        // TODO
-    }
+void Glfw::Run(OpQueue* opList){
+    Run(OpQueue::toPtr(opList));
+}
+
+void Glfw::Run(Ptr<OpQueue> &opList) {
+    while (opList!=NULL && !glfwWindowShouldClose(window)) {
+		if (opList->isHold()) 
+			opList->Run();
+	}
     Terminate();
-    return;
 }
 
 // Glfw* Glfw::getInstance() {

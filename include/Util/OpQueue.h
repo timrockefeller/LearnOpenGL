@@ -10,7 +10,7 @@ class OpQueue {
    public:
     OpQueue();
     ~OpQueue();
-    OpQueue& operator<<(Ptr<Operation> op);
+    OpQueue& operator<<(const Ptr<Operation> & op);
     OpQueue& operator<<(Operation* op);
     OpQueue& operator<<(const std::function<void()>& op);
     std::list<Ptr<Operation>> queue;
@@ -18,7 +18,9 @@ class OpQueue {
     bool isHold();
 
     template <typename T>
-    static Ptr<T> toPtr(T* op);
+    static Ptr<T> toPtr(T* op) {
+        return Ptr<T>(op, [&](T* op_) { delete op_; });
+    }
 
    protected:
     bool hold;

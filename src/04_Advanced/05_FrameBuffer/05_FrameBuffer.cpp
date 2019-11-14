@@ -8,6 +8,7 @@
 #include <Util/EventListener.h>
 #include <Util/GStorage.h>
 #include <Util/OpQueue.h>
+#include "CommonDefine.h"
 using namespace LOGL;
 using namespace KTKR;
 using namespace std;
@@ -47,12 +48,6 @@ int main(int argc, char const* argv[]) {
 
         5.0f, -0.5f, 5.0f,  2.0f,  0.0f,  -5.0f, -0.5f, -5.0f,
         0.0f, 2.0f,  5.0f,  -0.5f, -5.0f, 2.0f,  2.0f};
-    float quadVertices[] = {-1.0f, 1.0f, 0.0f, 1.0f,  -1.0f, -1.0f,
-                            0.0f,  0.0f, 1.0f, -1.0f, 1.0f,  0.0f,
-
-                            -1.0f, 1.0f, 0.0f, 1.0f,  1.0f,  -1.0f,
-                            1.0f,  0.0f, 1.0f, 1.0f,  1.0f,  1.0f};
-    vector<unsigned int> quadAttr = {2, 2};
 
     FBO fbor(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     fbor.Use();  // 在绑定到GL_FRAMEBUFFER目标之后，所有的读取和写入帧缓冲的操作将会影响当前绑定的帧缓冲。
@@ -72,6 +67,9 @@ int main(int argc, char const* argv[]) {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
                           (void*)(3 * sizeof(float)));
     glBindVertexArray(0);
+    // unsigned int cubeVAO = VAO(&(cubeVertices[0]), sizeof(cubeVertices), {3,
+    // 2}).GetID();
+
     // plane VAO
     unsigned int planeVAO, planeVBO;
     glGenVertexArrays(1, &planeVAO);
@@ -103,9 +101,10 @@ int main(int argc, char const* argv[]) {
     // glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
     //                       (void*)(2 * sizeof(float)));
     // glBindVertexArray(0);
-    VAO quadVAO(quadVertices, sizeof(quadVertices), quadAttr);
+    unsigned int quadVAO= VAO(&(quadVertices[0]), sizeof(quadVertices), {2,
+    2}).GetID();
 
-    Texture cubeTexture("./assets/textures/marble.jpg"),
+    Texture cubeTexture("./assets/textures/container2.png"),
         floorTexture("./assets/textures/metal.png");
 
     cubeTexture.setUnit(0);
@@ -148,7 +147,9 @@ int main(int argc, char const* argv[]) {
         ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_2,
                [&]() { screenshader.setInt("ctrl", 2); })
         ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_3,
-               [&]() { screenshader.setInt("ctrl", 3); });
+               [&]() { screenshader.setInt("ctrl", 3); })
+        ->bind(EventListener::KEYBOARD_PRESS | GLFW_KEY_4,
+               [&]() { screenshader.setInt("ctrl", 4); });
 
     OpQueue op;
     op << Glfw::getInstance()->_startOp << [&]() {  // draw default scene
@@ -187,28 +188,29 @@ int main(int argc, char const* argv[]) {
         shader.setMat4f("model", glm::mat4(1.0f));
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
-    } << [&]() {
+        // } << [&]() {
         /**
          *  render quad scene
          *
          */
-        FBO::UseDefault(            );
+        FBO::UseDefault();
         glDisable(GL_DEPTH_TEST);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         screenshader.Use();
-        quadVAO.Use();
         fbor.GetTexture()->setUnit(2);
-        quadVAO.Draw();
+        // quadVAO.Draw();
+        glBindVertexArray(quadVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
     } << Glfw::getInstance()->_endOp;
 
     Glfw::getInstance()->Run(&op);
 
-    glDeleteVertexArrays(1, &planeVAO);
-    glDeleteVertexArrays(1, &cubeVAO);
-    glDeleteBuffers(1, &cubeVBO);
-    glDeleteBuffers(1, &planeVBO);
+    // glDeleteVertexArrays(1, &planeVAO);
+    // glDeleteVertexArrays(1, &cubeVAO);
+    // glDeleteBuffers(1, &cubeVBO);
+    // glDeleteBuffers(1, &planeVBO);
 
     return 0;
 }

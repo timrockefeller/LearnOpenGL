@@ -14,8 +14,8 @@ class Glfw : public KTKR::Singleton<Glfw>{
     Glfw();
     ~Glfw();
     
-    
-    void Run(KTKR::OpQueue *opList);
+    void Run(KTKR::OpQueue* opList);
+    void Run(KTKR::Ptr<KTKR::OpQueue> &opList);
     void CloseWindow();
     void Terminate();
     GLFWwindow* getWindow();
