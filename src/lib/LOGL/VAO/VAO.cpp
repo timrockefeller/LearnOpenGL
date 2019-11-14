@@ -23,7 +23,7 @@ VAO::VAO(float const* data,
         patchLen += len;
     for (unsigned int i = 0, cur = 0; i < attrLen.size(); i++) {
         glEnableVertexAttribArray(i);
-        glVertexAttribPointer(0, attrLen[i], GL_FLOAT, GL_FALSE,
+        glVertexAttribPointer(i, attrLen[i], GL_FLOAT, GL_FALSE,
                               patchLen * sizeof(float),
                               (void*)(cur * sizeof(float)));
         cur += attrLen[i];
@@ -35,8 +35,8 @@ VAO::VAO(float const* data,
     isValid = true;
 }
 VAO::~VAO() {
-    // glDeleteVertexArrays(1, &ID);
-    // glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &ID);
+    glDeleteBuffers(1, &VBO);
 }
 unsigned int VAO::GetID() const {
     return ID;
