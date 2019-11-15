@@ -34,10 +34,35 @@ VAO::VAO(float const* data,
     hasIndex = false;
     isValid = true;
 }
+
+VAO::VAO(float const* data,
+         unsigned int dataSize,
+         const std::vector<unsigned int>& attrLen,
+         unsigned int const* index,
+         unsigned int indexSize)
+    : VAO(data, dataSize, attrLen) {
+    isValid = GenBindEBO(index, indexSize);
+}
+
 VAO::~VAO() {
     glDeleteVertexArrays(1, &ID);
+    glDeleteBuffers(1, &EBO);
     glDeleteBuffers(1, &VBO);
 }
+
+bool VAO::GenBindEBO(unsigned int const* index, unsigned int indexSize) {
+    Use();
+    if (index == NULL || indexSize <= 0)
+        return false;
+    hasIndex = true;
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * sizeof(unsigned int),
+                 &index[0], GL_STATIC_DRAW);
+    pointNum = indexSize;
+    return true;
+}
+
 unsigned int VAO::GetID() const {
     return ID;
 }
@@ -58,6 +83,9 @@ bool VAO::Draw() const {
     if (!Use()) {
         return false;
     }
-    glDrawArrays(GL_TRIANGLES, 0, pointNum);
+    if (hasIndex) {
+        glDrawElements(GL_TRIANGLES, pointNum, GL_UNSIGNED_INT, 0);
+    } else
+        glDrawArrays(GL_TRIANGLES, 0, pointNum);
     return true;
 }

@@ -47,11 +47,14 @@ int main(int argc, char const* argv[]) {
 
         5.0f, -0.5f, 5.0f,  2.0f,  0.0f,  -5.0f, -0.5f, -5.0f,
         0.0f, 2.0f,  5.0f,  -0.5f, -5.0f, 2.0f,  2.0f};
-    float quadVertices[] = {-1.0f, 1.0f, 0.0f, 1.0f,  -1.0f, -1.0f,
-                            0.0f,  0.0f, 1.0f, -1.0f, 1.0f,  0.0f,
+    float quadVertices[] = {-1.0f, 1.0f, 0.0f, 1.0f,   //
+                            -1.0f, -1.0f, 0.0f, 0.0f,  //
+                            1.0f, -1.0f, 1.0f, 0.0f,   //
 
-                            -1.0f, 1.0f, 0.0f, 1.0f,  1.0f,  -1.0f,
-                            1.0f,  0.0f, 1.0f, 1.0f,  1.0f,  1.0f};
+                            // -1.0f, 1.0f,  0.0f, 1.0f,  //
+                            // 1.0f,  -1.0f, 1.0f, 0.0f,  //
+                            1.0f, 1.0f, 1.0f, 1.0f};
+    unsigned int quadIndex[] = {0, 1, 2, 0, 2, 3};
 
     FBO fbor(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     fbor.Use();  // 在绑定到GL_FRAMEBUFFER目标之后，所有的读取和写入帧缓冲的操作将会影响当前绑定的帧缓冲。
@@ -63,7 +66,7 @@ int main(int argc, char const* argv[]) {
     VAO planeVAO(planeVertices, sizeof(planeVertices), {3, 2});
 
     // screen quad VAO
-    VAO quadVAO(&(quadVertices[0]), sizeof(quadVertices), {2, 2});
+    VAO quadVAO(&(quadVertices[0]), sizeof(quadVertices), {2, 2}, quadIndex, 6);
 
     Texture cubeTexture("./assets/textures/container2.png"),
         floorTexture("./assets/textures/metal.png");

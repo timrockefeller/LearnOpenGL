@@ -30,3 +30,8 @@ glFrameBufferTexture2D有以下的参数：
 - `textarget`：你希望附加的纹理类型
 - `texture`：要附加的纹理本身
 - `level`：多级渐远纹理的级别。我们将它保留为0。
+
+
+
+## Koans
+
