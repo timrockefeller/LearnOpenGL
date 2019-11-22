@@ -5,16 +5,16 @@
 using namespace LOGL;
 using namespace KTKR;
 using namespace std;
-Texture::Texture(const std::string& path, bool flip) : ID(0), type(TEXTURE_2D) {
+Texture::Texture(const std::string& path, bool flip) : ID(0), tex_type(TEXTURE_2D) {
     Load(path, flip);
 }
 
 Texture::Texture(std::vector<std::string> cubeMapFiles)
-    : ID(0), type(TEXTURE_CUBE_MAP) {
+    : ID(0), tex_type(TEXTURE_CUBE_MAP) {
     Load(cubeMapFiles);
 }
 
-Texture::Texture(size_t width, size_t height) : type(TEXTURE_2D) {
+Texture::Texture(size_t width, size_t height) : tex_type(TEXTURE_2D) {
     glGenTextures(1, &ID);
     glBindTexture(GL_TEXTURE_2D, ID);
 
@@ -44,7 +44,7 @@ bool Texture::Load(const std::string& path, bool flip, bool gammaCorrection) {
         cout << "ERROR: Texture [" << path.c_str() << "] load failed" << endl;
         return false;
     }
-    type = TEXTURE_2D;
+    tex_type = TEXTURE_2D;
     GLenum internalFormat;
     GLenum dataFormat;
     int nrComponents = img.getChannels();
@@ -100,7 +100,7 @@ bool Texture::Load(std::vector<std::string> cubeMapFiles,
         cout << "ERROR: The cubemap format is valid already." << endl;
         return false;
     }
-    type = TEXTURE_CUBE_MAP;
+    tex_type = TEXTURE_CUBE_MAP;
     glGenTextures(1, &ID);
     glBindTexture(GL_TEXTURE_CUBE_MAP, ID);
     unsigned int i = 0;
@@ -127,9 +127,9 @@ bool Texture::setUnit(GLuint unit) const {
         return false;
 
     glActiveTexture(GL_TEXTURE0 + unit);
-    if (TEXTURE_2D == type)
+    if (TEXTURE_2D == tex_type)
         glBindTexture(GL_TEXTURE_2D, ID);
-    else if (TEXTURE_CUBE_MAP == type)
+    else if (TEXTURE_CUBE_MAP == tex_type)
         glBindTexture(GL_TEXTURE_CUBE_MAP, ID);
     return true;
 }

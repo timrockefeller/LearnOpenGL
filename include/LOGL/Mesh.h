@@ -1,6 +1,7 @@
 #pragma once
 #include <LOGL/Shader.h>
 #include <LOGL/Texture.h>
+#include <LOGL/VAO.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -25,7 +26,8 @@ class Mesh {
          std::vector<Texture> textures);
     void Draw(Shader shader);
    private:
-    unsigned int VAO, VBO, EBO;
+    unsigned int meshVAO, VBO, EBO;
+    VAO vao;
     void setupMesh();
 };
 

@@ -3,6 +3,7 @@
 namespace LOGL {
 class VAO {
    public:
+    VAO() = default;
     // struct VBO_DataPatch {
     //     float const* data;
     //     unsigned int dataSize;

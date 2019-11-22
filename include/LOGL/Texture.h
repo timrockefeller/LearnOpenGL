@@ -27,7 +27,9 @@ class Texture {
     bool setUnit(GLuint unit = 0) const;
     GLuint GetID() const;
 
-    Texture_Type type;
+    Texture_Type tex_type;
+    std::string type;
+    std::string path;
 
    private:
     GLuint ID;
