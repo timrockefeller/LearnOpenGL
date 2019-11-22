@@ -5,11 +5,16 @@
 using namespace LOGL;
 using namespace KTKR;
 using namespace std;
-Texture::Texture(const std::string& path, bool flip) : ID(0), path(path) {
+Texture::Texture(const std::string& path, bool flip) : ID(0), type(TEXTURE_2D) {
     Load(path, flip);
 }
 
-Texture::Texture(size_t width, size_t height) {
+Texture::Texture(std::vector<std::string> cubeMapFiles)
+    : ID(0), type(TEXTURE_CUBE_MAP) {
+    Load(cubeMapFiles);
+}
+
+Texture::Texture(size_t width, size_t height) : type(TEXTURE_2D) {
     glGenTextures(1, &ID);
     glBindTexture(GL_TEXTURE_2D, ID);
 
@@ -39,7 +44,7 @@ bool Texture::Load(const std::string& path, bool flip, bool gammaCorrection) {
         cout << "ERROR: Texture [" << path.c_str() << "] load failed" << endl;
         return false;
     }
-
+    type = TEXTURE_2D;
     GLenum internalFormat;
     GLenum dataFormat;
     int nrComponents = img.getChannels();
@@ -85,11 +90,46 @@ bool Texture::Load(const std::string& path, bool flip, bool gammaCorrection) {
     return true;
 }
 
+bool Texture::Load(std::vector<std::string> cubeMapFiles,
+                   bool gammaCorrection) {
+    if (IsValid()) {
+        cout << "ERROR: The texture is valid already." << endl;
+        return false;
+    }
+    if (cubeMapFiles.size() != 6) {
+        cout << "ERROR: The cubemap format is valid already." << endl;
+        return false;
+    }
+    type = TEXTURE_CUBE_MAP;
+    glGenTextures(1, &ID);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, ID);
+    unsigned int i = 0;
+    for (auto& path : cubeMapFiles) {
+        Image img(path.c_str());
+        if (!img.isValid()) {
+            cout << "ERROR: Texture [" << path.c_str() << "] load failed"
+                 << endl;
+            return false;
+        }
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + (i++), 0, GL_RGB,
+                     img.getWidth(), img.getHeight(), 0, GL_RGB,
+                     GL_UNSIGNED_BYTE, img.getData());
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+}
+
 bool Texture::setUnit(GLuint unit) const {
     if (!IsValid())
         return false;
 
     glActiveTexture(GL_TEXTURE0 + unit);
-    glBindTexture(GL_TEXTURE_2D, ID);
+    if (TEXTURE_2D == type)
+        glBindTexture(GL_TEXTURE_2D, ID);
+    else if (TEXTURE_CUBE_MAP == type)
+        glBindTexture(GL_TEXTURE_CUBE_MAP, ID);
     return true;
 }
