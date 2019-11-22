@@ -14,6 +14,8 @@ Mesh::Mesh(std::vector<Vertex> vertices,
 void Mesh::Draw(Shader shader) {
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
+    unsigned int normalNr = 1;
+    unsigned int heightNr = 1;
     for (unsigned int i = 0; i < textures.size(); i++) {
         // 获取纹理序号（diffuse_textureN 中的 N）
         string number;
@@ -21,50 +23,24 @@ void Mesh::Draw(Shader shader) {
         if (name == "texture_diffuse")
             number = std::to_string(diffuseNr++);
         else if (name == "texture_specular")
-            number = std::to_string(specularNr++);
-
+            number = std::to_string(
+                specularNr++);  // transfer unsigned int to stream
+        else if (name == "texture_normal")
+            number =
+                std::to_string(normalNr++);  // transfer unsigned int to stream
+        else if (name == "texture_height")
+            number =
+                std::to_string(heightNr++);  // transfer unsigned int to stream
         // custom by user
-        shader.setInt(("material." + name + number).c_str(), i);
+        shader.setInt((name + number).c_str(), i);
         textures[i].setUnit(i);
     }
-    glActiveTexture(GL_TEXTURE0);
 
     // 绘制网格
-    // glBindVertexArray(meshVAO);
-    // glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-    // glBindVertexArray(0);
     vao.Draw();
 }
 
 void Mesh ::setupMesh() {
-    // glGenVertexArrays(1, &meshVAO);
-    // glGenBuffers(1, &VBO);
-    // glGenBuffers(1, &EBO);
-
-    // // load data
-
-    // glBindVertexArray(meshVAO);
-
-    // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    // glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex),
-    //              &vertices[0], GL_STATIC_DRAW);
-
-    // glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int),
-    //              &indices[0], GL_STATIC_DRAW);
-
-    // // sort data
-
-    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-    // glEnableVertexAttribArray(0);
-    // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-    //                       (void*)offsetof(Vertex, Normal));
-    // glEnableVertexAttribArray(1);
-    // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-    //                       (void*)offsetof(Vertex, TexCoords));
-    // glEnableVertexAttribArray(2);
-
-    // glBindVertexArray(0);  // restore
-    vao = VAO(&(vertices[0].Position[0]), vertices.size()*8,
-            {3,3,2},&(indices[0]),indices.size());
+    vao = VAO((float*)&(vertices[0]), vertices.size() * sizeof(Vertex),
+              {3, 3, 2}, &(indices[0]), indices.size());
 }
