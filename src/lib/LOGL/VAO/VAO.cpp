@@ -46,7 +46,8 @@ VAO::VAO(float const* data,
 
 VAO::~VAO() {
     glDeleteVertexArrays(1, &ID);
-    glDeleteBuffers(1, &EBO);
+    if (hasIndex)
+        glDeleteBuffers(1, &EBO);
     glDeleteBuffers(1, &VBO);
 }
 
@@ -58,7 +59,7 @@ bool VAO::GenBindEBO(unsigned int const* index, unsigned int indexSize) {
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * sizeof(unsigned int),
-                 &index[0], GL_STATIC_DRAW);
+                 index, GL_STATIC_DRAW);
     pointNum = indexSize;
     return true;
 }
@@ -88,4 +89,5 @@ bool VAO::Draw() const {
     } else
         glDrawArrays(GL_TRIANGLES, 0, pointNum);
     return true;
+    glBindVertexArray(0);
 }
