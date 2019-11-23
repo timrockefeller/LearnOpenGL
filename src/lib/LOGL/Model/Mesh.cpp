@@ -24,13 +24,13 @@ void Mesh::Draw(Shader shader) {
             number = std::to_string(diffuseNr++);
         else if (name == "texture_specular")
             number = std::to_string(
-                specularNr++);  // transfer unsigned int to stream
+                specularNr++);
         else if (name == "texture_normal")
             number =
-                std::to_string(normalNr++);  // transfer unsigned int to stream
+                std::to_string(normalNr++);
         else if (name == "texture_height")
             number =
-                std::to_string(heightNr++);  // transfer unsigned int to stream
+                std::to_string(heightNr++);
         // custom by user
         shader.setInt((name + number).c_str(), i);
         textures[i].setUnit(i);
@@ -41,6 +41,6 @@ void Mesh::Draw(Shader shader) {
 }
 
 void Mesh ::setupMesh() {
-    vao = VAO((float*)&(vertices[0]), vertices.size() * sizeof(Vertex),
+    vao = VAO((float *)&vertices, vertices.size() * sizeof(Vertex),
               {3, 3, 2}, &(indices[0]), indices.size());
 }

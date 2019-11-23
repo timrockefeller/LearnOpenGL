@@ -2,6 +2,7 @@
 #include <LOGL/Common.h>
 #include <LOGL/FBO.h>
 #include <LOGL/Glfw.h>
+#include <LOGL/Model.h>
 #include <LOGL/Shader.h>
 #include <LOGL/Texture.h>
 #include <LOGL/VAO.h>
@@ -60,8 +61,10 @@ int main(int argc, char const* argv[]) {
     Shader skyboxShader("src/04_Advanced/06_CubeMap/vertex_cm.vs",
                         "src/04_Advanced/06_CubeMap/frag_cm.fs"),
         cubeShader("src/04_Advanced/06_CubeMap/vertex.vs",
-                   "src/04_Advanced/06_CubeMap/frag_color.fs");
-
+                   "src/04_Advanced/06_CubeMap/frag_color.fs"),
+        *modelShader = new Shader("src/04_Advanced/06_CubeMap/vertex_fixed.vs",
+                    "src/04_Advanced/06_CubeMap/frag_model.fs");
+    Model nanosuit("assets/models/nanosuit/nanosuit.obj");
     EventListener::getInstance()
         ->bind(EventListener::Event_Type::MOUSE_SCROLL,
                [&]() {
@@ -119,10 +122,18 @@ int main(int argc, char const* argv[]) {
         cubeShader.setInt("skybox", 0);
         cubeShader.setVec3f("camPos", camera.GetPosition());
         cubeVAO.Draw();
+
+
+
+        model = glm::translate(model, glm::vec3(1.0f, 0, 0));
+        modelShader->setMat4f("view", view);
+        modelShader->setMat4f("projection", projection);
+        modelShader->setMat4f("model", model);
+        nanosuit.Draw(*modelShader);
     } << Glfw::getInstance()->_endOp;
 
     Glfw::getInstance()->Run(oplist);
-
+    delete modelShader;
     return 0;
 }
 

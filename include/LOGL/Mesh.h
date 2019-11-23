@@ -26,7 +26,6 @@ class Mesh {
          std::vector<Texture> textures);
     void Draw(Shader shader);
    private:
-    unsigned int meshVAO, VBO, EBO;
     VAO vao;
     void setupMesh();
 };
