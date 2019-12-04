@@ -4,7 +4,7 @@
 using namespace std;
 using namespace LOGL;
 
-VAO::VAO(float const* data,
+VAO::VAO(void const* data,
          size_t dataSize,
          const vector<unsigned int>& attrLen) {
     if (data == NULL || dataSize == 0 || attrLen.size() == 0) {
@@ -35,7 +35,7 @@ VAO::VAO(float const* data,
     isValid = true;
 }
 
-VAO::VAO(float const* data,
+VAO::VAO(void const* data,
          unsigned int dataSize,
          const std::vector<unsigned int>& attrLen,
          unsigned int const* index,
@@ -58,9 +58,8 @@ bool VAO::GenBindEBO(unsigned int const* index, unsigned int indexSize) {
     hasIndex = true;
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * sizeof(unsigned int),
-                 index, GL_STATIC_DRAW);
-    pointNum = indexSize;
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize, index, GL_STATIC_DRAW);
+    pointNum = indexSize / sizeof(size_t);
     return true;
 }
 
@@ -88,6 +87,6 @@ bool VAO::Draw() const {
         glDrawElements(GL_TRIANGLES, pointNum, GL_UNSIGNED_INT, 0);
     } else
         glDrawArrays(GL_TRIANGLES, 0, pointNum);
-    return true;
     glBindVertexArray(0);
+    return true;
 }
