@@ -69,7 +69,7 @@ void Mesh ::setupMesh() {
 }
 
 Mesh::~Mesh() {
-    glDeleteBuffers(1, &meshEBO);
-    glDeleteBuffers(1, &meshEBO);
-    glDeleteVertexArrays(1, &meshVAO);
+    // glDeleteBuffers(1, &meshEBO);
+    // glDeleteBuffers(1, &meshEBO);
+    // glDeleteVertexArrays(1, &meshVAO);
 }
