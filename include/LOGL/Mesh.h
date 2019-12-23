@@ -21,12 +21,18 @@ class Mesh {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
-    Mesh(std::vector<Vertex> vertices,
-         std::vector<unsigned int> indices,
-         std::vector<Texture> textures);
+    Mesh(std::vector<Vertex> &vertices,
+         std::vector<unsigned int>& indices,
+         std::vector<Texture> &textures);
     void Draw(Shader shader);
+    ~Mesh();
+
    private:
-    VAO vao;
+    // VAO vao;
+    unsigned int meshVAO;
+    unsigned int meshVBO;
+    unsigned int meshEBO;
+    
     void setupMesh();
 };
 
