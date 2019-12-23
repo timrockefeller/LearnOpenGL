@@ -113,7 +113,7 @@ int main(int argc, char const* argv[]) {
         glEnable(GL_DEPTH_TEST);
         // container
         cubeShader.Use();
-        model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+        model = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
         cubeShader.setMat4f("view", view);
         cubeShader.setMat4f("projection", projection);
         cubeShader.setMat4f("model", model);
